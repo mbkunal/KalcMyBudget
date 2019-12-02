@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
                 categoryDAO.insertCategory(category);
                 Log.i("Category created",nm);
                 long a = categoryDAO.getCategoryId(nm);
-                Log.i("Ccategory id in db",Long.toString(a));
+                Log.i("category id in db",Long.toString(a));
                 List<String> categ= categoryDAO.getAllCategoryNames();
                 for(String cm : categ){
                     Log.i("category name" , cm);
@@ -107,16 +108,12 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
                 for(TransactionModal tm : tmlist){
                     Long fromId = tm.getFromId();
                     Long toId = tm.getToId();
-                    Transaction t = new Transaction(Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),tm.getTransactionDate().toString(),Integer.toString(tm.getAmount()));
-                    CategoryModal cmc = categoryDAO.getCategoryById(tm.getFromId());
-                    String to = cmc.getCategoryName();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
+                    Transaction t = new Transaction(Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),simpleDateFormat.format(tm.getTransactionDate()),Integer.toString(tm.getAmount()));
                     list.add(t);
                     i++;
                 }
                 tActivity.createTransactionList(list);
-
-                break;
-            case("convertOperation"):
                 break;
         }
         return st;
