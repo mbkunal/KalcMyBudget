@@ -7,12 +7,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-class DBClass extends AsyncTask<Void,Void,Integer> {
+class DBClass extends AsyncTask<Void,Void,List<?>> {
 
     private MainDatabase db ;
     private MainActivity mActivity;
@@ -28,6 +27,7 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
     private int amount;
     private Date createDate;
     private Date transactionDate;
+    List mList = null;
 
     public DBClass(Context context,TransactionsActivity activity,String operation){
         this.db = MainDatabase.getMainDatabase(context);
@@ -63,7 +63,7 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
         this.transactionDate = transactionDate;
     }
     @Override
-    protected Integer doInBackground(Void... voids) {
+    protected List<?> doInBackground(Void... voids) {
         int st = 0;
         switch(operation){
             case("CATEGORY"):
@@ -71,13 +71,6 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
                 category.setCategoryName(nm);
                 category.setType(tp);
                 categoryDAO.insertCategory(category);
-                Log.i("Category created",nm);
-                long a = categoryDAO.getCategoryId(nm);
-                Log.i("category id in db",Long.toString(a));
-                List<String> categ= categoryDAO.getAllCategoryNames();
-                for(String cm : categ){
-                    Log.i("category name" , cm);
-                }
                 break;
             case("TRANSACTION"):
                 TransactionModal transaction = new TransactionModal();
@@ -92,13 +85,11 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
                 break;
             case("GET_CATEGORIES"):
                 try {
-                    mActivity.setList(categoryDAO.getAllCategoryNames());
+                    mList = categoryDAO.getAllCategoryNames();
                 }catch (Exception e){
                     e.printStackTrace();
-                    mActivity.setList(null);
+                    mList = null;
                 }
-
-                Log.i("category call","done");
                 break;
             case("GET_TRANSACTIONS"):
                 List<TransactionModal> tmlist = transactionDAO.getAllTransactions();
@@ -108,17 +99,28 @@ class DBClass extends AsyncTask<Void,Void,Integer> {
                 for(TransactionModal tm : tmlist){
                     Long fromId = tm.getFromId();
                     Long toId = tm.getToId();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
-                    Transaction t = new Transaction(Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),simpleDateFormat.format(tm.getTransactionDate()),Integer.toString(tm.getAmount()));
+                    Transaction t = new Transaction(Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),tm.getTransactionDate().toString(),Integer.toString(tm.getAmount()));
                     list.add(t);
                     i++;
                 }
-                tActivity.createTransactionList(list);
+                mList = list;
                 break;
         }
-        return st;
+        return mList;
     }
-
+    @Override
+    protected void onPostExecute(List<?> list) {
+        switch(operation) {
+            case("GET_CATEGORIES"):
+                List<String> cList = (List<String>)list;
+                mActivity.setList(cList);
+                break;
+            case("GET_TRANSACTIONS"):
+                List<Transaction> tList = (List<Transaction>)list;
+                tActivity.createTransactionList(tList);
+                break;
+        }
+    }
 
 
 }
