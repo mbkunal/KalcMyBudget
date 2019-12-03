@@ -19,18 +19,18 @@ public class TransactionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transactions);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         DBClass dbclass = new DBClass(this, this,"GET_TRANSACTIONS");
         dbclass.execute();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     public void createTransactionList(List<Transaction> list){
         Transaction header = new Transaction("SR","From","To","Comment","Date","Amount");
-        List<Transaction> temp = new ArrayList<>();
-        temp.add(header);
-        temp.addAll(list);
+        List<Transaction> transactionsList = new ArrayList<>();
+        transactionsList.add(header);
+        transactionsList.addAll(list);
         ListView transactionListView = findViewById(R.id.transactions_listView);
-        List<Transaction> transactionsList = temp;
         TransactionListAdapter tLAdapter = new TransactionListAdapter(this,R.layout.transaction_list_adapter,transactionsList);
         transactionListView.setAdapter(tLAdapter);
     }

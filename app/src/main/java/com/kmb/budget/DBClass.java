@@ -14,8 +14,7 @@ import java.util.List;
 class DBClass extends AsyncTask<Void,Void,List<?>> {
 
     private MainDatabase db ;
-    private MainActivity mActivity;
-    private TransactionsActivity tActivity;
+    private Activity mActivity;
     private CategoryDAO categoryDAO;
     private TransactionDAO transactionDAO;
     private String nm;
@@ -27,19 +26,13 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private int amount;
     private Date createDate;
     private Date transactionDate;
-    List mList = null;
+    private List mList = null;
 
-    public DBClass(Context context,TransactionsActivity activity,String operation){
+
+    public DBClass(Context context,Activity activity,String operation){
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
         this.transactionDAO = db.transactionDAO();
-        this.tActivity = activity;
-        this.operation = operation;
-    }
-
-    public DBClass(Context context,MainActivity activity,String operation){
-        this.db = MainDatabase.getMainDatabase(context);
-        this.categoryDAO = db.categoryDAO();
         this.mActivity = activity;
         this.operation = operation;
     }
@@ -105,6 +98,21 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 mList = list;
                 break;
+            case("GET_ANALYSIS"):
+                List<CategorySum> csl= new ArrayList<>();
+                List<CategoryModal> cml = categoryDAO.getAllCategories();
+                for(CategoryModal cmt : cml){
+                    String cname = cmt.getCategoryName();
+                    List<TransactionModal> tml = transactionDAO.getCreditTransaction(cmt.getId());
+                    long positive = getTransactionSum(tml);
+                    tml = transactionDAO.getDebitTransaction(cmt.getId());
+                    long negative = getTransactionSum(tml);
+                    long balance = positive - negative;
+                    CategorySum cs = new CategorySum(cname,Long.toString(balance));
+                    csl.add(cs);
+                }
+                mList = csl;
+                break;
         }
         return mList;
     }
@@ -113,13 +121,26 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         switch(operation) {
             case("GET_CATEGORIES"):
                 List<String> cList = (List<String>)list;
-                mActivity.setList(cList);
+                mActivity = (MainActivity)mActivity;
+                ((MainActivity)mActivity).setList(cList);
                 break;
             case("GET_TRANSACTIONS"):
                 List<Transaction> tList = (List<Transaction>)list;
-                tActivity.createTransactionList(tList);
+                ((TransactionsActivity)mActivity).createTransactionList(tList);
+                break;
+            case("GET_ANALYSIS"):
+                List<CategorySum> csl = (List<CategorySum>)mList;
+                ((AnalysisActivity)mActivity).createAnalysisList(csl);
                 break;
         }
+    }
+
+    long getTransactionSum(List<TransactionModal> tml){
+        long sum = 0;
+        for(TransactionModal tm : tml){
+            sum += tm.getAmount();
+        }
+        return sum;
     }
 
 

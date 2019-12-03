@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
     public void goToAnalysis(View view){
-
+        Intent intent = new Intent(this, AnalysisActivity.class);
+        startActivity(intent);
     }
     public void goToSettings(View view){
        Intent intent = new Intent(this, Setting.class);

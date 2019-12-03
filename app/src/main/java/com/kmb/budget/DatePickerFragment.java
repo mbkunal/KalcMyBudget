@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
@@ -21,7 +22,9 @@ public class DatePickerFragment extends DialogFragment
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), (MainActivity)getActivity(), year, month, day);
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), (MainActivity)getActivity(), year, month, day);
+        dialog.getDatePicker().setMaxDate(new Date().getTime());
+        return dialog;
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
