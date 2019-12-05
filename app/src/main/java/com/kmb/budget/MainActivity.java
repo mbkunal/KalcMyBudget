@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -43,8 +45,21 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         db = MainDatabase.getMainDatabase(this.getApplicationContext());
         categoryDAO = db.categoryDAO();
         transactionDAO =db.transactionDAO();
+        EditText edt = findViewById(R.id.transDate);
+        edt.setText(formatter.format(new Date()));
+        edt.setShowSoftInputOnFocus(false);
         DBClass db = new DBClass(this, this,"GET_CATEGORIES");
         db.execute();
+    }
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        ((EditText)findViewById(R.id.transDate)).setText(day + "/" + month + "/" + year);
+    }
+    @Override
+    public void onResume() {
+        DBClass db = new DBClass(this, this,"GET_CATEGORIES");
+        db.execute();
+        super.onResume();
     }
     public void setList(List<String> list){
         List<String >categoryNamesList = list;
@@ -58,23 +73,43 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
     }
     public void addTransaction(View view) {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(this.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
         Spinner toCategory = findViewById(R.id.toDropdown);
         Spinner fromCategory = findViewById(R.id.fromDropdown);
         EditText comment = findViewById(R.id.comment);
-        Button date = findViewById(R.id.transDate);
-        int amount = Integer.valueOf(((EditText)findViewById(R.id.amount)).getText().toString());
-        String to = toCategory.getSelectedItem().toString();
-        String from = fromCategory.getSelectedItem().toString();
+        EditText date = findViewById(R.id.transDate);
+        int amount = 0;
+        String to = "";
+        String from = "";
+        try {
+            amount = Integer.valueOf(((EditText) findViewById(R.id.amount)).getText().toString());
+            to = toCategory.getSelectedItem().toString();
+            from = fromCategory.getSelectedItem().toString();
+        }catch(Exception e){
+            Snackbar invalidValue = Snackbar.make(view, "Check the values", Snackbar.LENGTH_LONG);
+            invalidValue.show();
+            return;
+        }
         String commentText = comment.getText().toString();
         Date tDate = new Date();
         Date currentDate = new Date();
-        try {
+        /*DATE BLOCK*/try {
             tDate = formatter.parse(date.getText().toString());
         } catch (ParseException e) {}
-        DBClass dbclass = new DBClass(this,to,from,commentText,amount,currentDate,tDate);
+        if(to == "" || from == "" || commentText == "" ){
+            return;
+        }
+        DBClass dbclass = new DBClass(this, to, from, commentText, amount, currentDate, tDate);
         dbclass.execute();
         Snackbar transactDone = Snackbar.make(view, "Transaction Added", Snackbar.LENGTH_SHORT);
         transactDone.show();
+        comment.setText("");
+        ((EditText) findViewById(R.id.amount)).setText("");
+        date.setText(formatter.format(new Date()));
     }
     public void showDatePickerDialog(View view){
         DialogFragment newFragment = new DatePickerFragment();
@@ -102,10 +137,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         mySnackbar.show();
 
     }
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        ((Button)findViewById(R.id.transDate)).setText(day + "/" + month + "/" + year);
-    }
+
 }
 
 

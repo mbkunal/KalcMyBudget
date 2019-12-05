@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fromText" />
 
-    <Button
+    <EditText
         android:id="@+id/transDate"
         android:layout_width="146dp"
         android:layout_height="55dp"
@@ -79,7 +79,8 @@
         android:ems="10"
         android:hint="@string/dateOfTrans"
         android:onClick="showDatePickerDialog"
-        android:text="@string/dateOfTrans"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintStart_toEndOf="@+id/comment"
         app:layout_constraintTop_toBottomOf="@+id/fromDropdown" />
 
