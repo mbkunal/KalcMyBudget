@@ -23,7 +23,4 @@
 
     <include
         layout="@layout/content_transactions" />
-
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

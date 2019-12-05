@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
     public void setList(List<String> list){
         List<String >categoryNamesList = list;
-        if(list != null) {
+        if(list != null && list.size()>0) {
             Log.i("Categories", categoryNamesList.get(1));
             String[] categoryNamesArray = new String[categoryNamesList.size()];
             categoryNamesArray = categoryNamesList.toArray(categoryNamesArray);
