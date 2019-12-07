@@ -11,13 +11,13 @@
         android:layout_width="115dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="12dp"
         android:text="@string/to"
         android:textColor="#000000"
         android:textSize="44sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fromText"
         tools:text="@string/to" />
 
     <TextView
@@ -25,41 +25,41 @@
         android:layout_width="115dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="64dp"
         android:text="@string/from"
         android:textColor="#000000"
         android:textSize="44sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toText"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/from" />
 
     <Spinner
         android:id="@+id/toDropdown"
         android:layout_width="200dp"
         android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
         android:spinnerMode="dropdown"
         app:layout_constraintStart_toEndOf="@+id/toText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/fromDropdown" />
 
     <Spinner
         android:id="@+id/fromDropdown"
         android:layout_width="200dp"
         android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="64dp"
         android:spinnerMode="dropdown"
         app:layout_constraintStart_toEndOf="@+id/fromText"
-        app:layout_constraintTop_toBottomOf="@+id/toDropdown" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/comment"
-        android:layout_width="205dp"
+        android:layout_width="200dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:autofillHints="@string/comment"
         android:ems="10"
         android:hint="@string/comment"
@@ -67,33 +67,34 @@
         android:singleLine="false"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fromText" />
+        app:layout_constraintTop_toBottomOf="@+id/amount" />
 
     <EditText
         android:id="@+id/transDate"
-        android:layout_width="146dp"
+        android:layout_width="145dp"
         android:layout_height="55dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:autofillHints="@string/dateOfTrans"
         android:ems="10"
-        android:hint="@string/dateOfTrans"
-        android:onClick="showDatePickerDialog"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        app:layout_constraintStart_toEndOf="@+id/comment"
-        app:layout_constraintTop_toBottomOf="@+id/fromDropdown" />
+        android:hint="@string/dateOfTrans"
+        android:inputType="date"
+        android:onClick="showDatePickerDialog"
+        app:layout_constraintStart_toEndOf="@+id/amount"
+        app:layout_constraintTop_toBottomOf="@+id/toDropdown" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="157dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="220dp"
+        android:layout_width="140dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         android:hint="@string/transact"
         android:onClick="addTransaction"
         android:text="@string/transact"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/comment"
         app:layout_constraintTop_toBottomOf="@+id/transDate" />
 
     <Button
@@ -142,13 +143,14 @@
 
     <EditText
         android:id="@+id/amount"
-        android:layout_width="181dp"
+        android:layout_width="175dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
+        android:autofillHints="0"
         android:hint="@string/amount"
         android:inputType="numberSigned|numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment" />
+        app:layout_constraintTop_toBottomOf="@+id/toText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
