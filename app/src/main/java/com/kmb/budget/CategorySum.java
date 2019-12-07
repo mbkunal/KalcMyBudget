@@ -1,6 +1,6 @@
 package com.kmb.budget;
 
-public class CategorySum {
+class CategorySum {
     private String categoryName;
     private String balance;
 

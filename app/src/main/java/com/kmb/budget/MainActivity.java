@@ -4,19 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -25,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.validation.Validator;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public static final String INVESTMENT= "INVESTMENT";
@@ -33,10 +27,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     public static final String SOURCE = "SOURCE";
     public static final String BTF = "BTF";
 
-    MainDatabase db ;
-    CategoryDAO categoryDAO;  // = db.categoryDAO();
-    TransactionDAO transactionDAO;
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    private MainDatabase db ;
+    private CategoryDAO categoryDAO;  // = db.categoryDAO();
+    private TransactionDAO transactionDAO;
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     public void setList(List<String> list){
         List<String >categoryNamesList = list;
         if(list != null && list.size()>0) {
-            Log.i("Categories", categoryNamesList.get(1));
             String[] categoryNamesArray = new String[categoryNamesList.size()];
             categoryNamesArray = categoryNamesList.toArray(categoryNamesArray);
             ArrayAdapter<String> categories = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, categoryNamesArray);
@@ -82,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         Spinner fromCategory = findViewById(R.id.fromDropdown);
         EditText comment = findViewById(R.id.comment);
         EditText date = findViewById(R.id.transDate);
-        int amount = 0;
-        String to = "";
-        String from = "";
+        int amount;
+        String to;
+        String from;
         try {
             amount = Integer.valueOf(((EditText) findViewById(R.id.amount)).getText().toString());
             to = toCategory.getSelectedItem().toString();
@@ -95,12 +88,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             return;
         }
         String commentText = comment.getText().toString();
-        Date tDate = new Date();
+        Date tDate;
         Date currentDate = new Date();
         /*DATE BLOCK*/try {
             tDate = formatter.parse(date.getText().toString());
-        } catch (ParseException e) {}
-        if(to == "" || from == "" || commentText == "" ){
+        } catch (ParseException e) {
+            tDate = currentDate;
+        }
+        if(to.equals("") || from.equals("")|| commentText.equals("") ){
             return;
         }
         DBClass dbclass = new DBClass(this, to, from, commentText, amount, currentDate, tDate);
@@ -133,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         /*TODO
         Add salary as a transaction in db
          */
-        Snackbar mySnackbar = Snackbar.make(view, "Salary Added", Snackbar.LENGTH_SHORT);
-        mySnackbar.show();
+        Snackbar salary = Snackbar.make(view, "Salary Added", Snackbar.LENGTH_SHORT);
+        salary.show();
 
     }
 

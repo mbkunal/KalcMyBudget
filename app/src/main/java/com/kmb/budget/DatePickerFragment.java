@@ -5,15 +5,17 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class DatePickerFragment extends DialogFragment
+class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
         final Calendar c = Calendar.getInstance();

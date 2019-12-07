@@ -25,7 +25,11 @@ public class AddCategory extends AppCompatActivity {
                 R.array.category_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         catTypeSpinner.setAdapter(adapter);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
     }
     public void createCategory(View view){
         Spinner type = findViewById(R.id.categoryTypeValue);

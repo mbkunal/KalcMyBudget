@@ -2,7 +2,7 @@ package com.kmb.budget;
 
 
 
-public class Transaction {
+class Transaction {
     private String sr;
     private String from;
     private String to;

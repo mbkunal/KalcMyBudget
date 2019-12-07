@@ -2,11 +2,9 @@ package com.kmb.budget;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -121,7 +119,6 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         switch(operation) {
             case("GET_CATEGORIES"):
                 List<String> cList = (List<String>)list;
-                mActivity = (MainActivity)mActivity;
                 ((MainActivity)mActivity).setList(cList);
                 break;
             case("GET_TRANSACTIONS"):
@@ -135,7 +132,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         }
     }
 
-    long getTransactionSum(List<TransactionModal> tml){
+    private long getTransactionSum(List<TransactionModal> tml){
         long sum = 0;
         for(TransactionModal tm : tml){
             sum += tm.getAmount();

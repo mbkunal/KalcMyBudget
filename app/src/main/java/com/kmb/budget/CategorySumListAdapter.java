@@ -17,12 +17,7 @@ class CategorySumListAdapter extends ArrayAdapter<CategorySum> {
     private Context context;
     private int resource;
 
-    /**
-     *
-     * @param context
-     * @param resource
-     * @param objects
-     */
+
     public CategorySumListAdapter(@NonNull Context context, int resource, @NonNull List<CategorySum> objects) {
         super(context, resource, objects);
         this.context = context;

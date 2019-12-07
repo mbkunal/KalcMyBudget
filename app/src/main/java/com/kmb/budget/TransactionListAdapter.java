@@ -19,12 +19,7 @@ class TransactionListAdapter extends ArrayAdapter<Transaction> {
     private int resource;
 
 
-    /**
-     * Default constructor for transaction adapter
-     * @param context
-     * @param resource
-     * @param objects
-     */
+
     public TransactionListAdapter(@NonNull Context context, int resource, @NonNull List<Transaction> objects) {
         super(context, resource, objects);
         this.context = context;

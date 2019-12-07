@@ -10,7 +10,7 @@ public class CategoryModal {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="Id")
-    public Long Id;
+    private Long Id;
 
     @ColumnInfo(name = "categoryName")
     private String categoryName;
