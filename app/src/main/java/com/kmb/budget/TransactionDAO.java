@@ -25,6 +25,9 @@ public interface TransactionDAO {
     @Query("Select * from transactions where fromId = :fromId")
     List<TransactionModal> getDebitTransaction(long fromId);
 
+    @Query("Delete from transactions where _id= :id")
+    void deleteTransactionById(Long id);
+
     @Delete
     void delete(TransactionModal transaction) ;
 

@@ -39,4 +39,6 @@
     <string name="title_activity_setting">Setting</string>
     <string name="title_activity_transactions">TransactionsActivity</string>
     <string name="title_activity_analysis">AnalysisActivity</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
 </resources>

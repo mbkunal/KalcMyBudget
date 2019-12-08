@@ -90,7 +90,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 for(TransactionModal tm : tmlist){
                     Long fromId = tm.getFromId();
                     Long toId = tm.getToId();
-                    Transaction t = new Transaction(Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),tm.getTransactionDate().toString(),Integer.toString(tm.getAmount()));
+                    Transaction t = new Transaction(tm.get_id(),Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),tm.getTransactionDate().toString(),Integer.toString(tm.getAmount()));
                     list.add(t);
                     i++;
                 }
@@ -111,6 +111,16 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 mList = csl;
                 break;
+
+            case("DELETE_TRANSACTION"):
+                TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
+                transactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
+                //TransactionModal transactionModal = transactionDAO.getTransaction(transactionsActivity.temp.getId());
+                //transactionDAO.delete(transactionModal);
+                TransactionModal tm = transactionDAO.getTransaction(transactionsActivity.temp.getId());
+
+                Log.e("Transaction","Deleted"+(tm==null?" real":"not Again"));
+                break;
         }
         return mList;
     }
@@ -130,6 +140,10 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 ((AnalysisActivity)mActivity).createAnalysisList(csl);
                 break;
         }
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     private long getTransactionSum(List<TransactionModal> tml){

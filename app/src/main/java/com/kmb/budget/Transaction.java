@@ -10,6 +10,16 @@ class Transaction {
     private String date;
     private String amount;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    private Long id;
+
     public String getSr() {
         return sr;
     }
@@ -58,7 +68,8 @@ class Transaction {
         this.amount = amount;
     }
 
-    public Transaction(String sr, String from, String to, String comment, String date, String amount) {
+    public Transaction(Long id,String sr, String from, String to, String comment, String date, String amount) {
+        this.id = id;
         this.sr = sr;
         this.from = from;
         this.to = to;
