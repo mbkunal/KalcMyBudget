@@ -34,4 +34,8 @@ public class Setting extends AppCompatActivity {
         Intent intent = new Intent(this, AddCategory.class);
         startActivity(intent);
     }
+
+    public void listCategory(View view) {
+
+    }
 }

@@ -35,7 +35,10 @@ public class TransactionsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        new DBClass(context, ta,getTransactions).execute();
+
+
+        Long filterCategoryId = getIntent().getLongExtra("category",0);
+        new DBClass(context, ta,getTransactions,filterCategoryId).execute();
         ListView transactionListView = findViewById(R.id.transactions_listView);
         registerForContextMenu(transactionListView);
     }

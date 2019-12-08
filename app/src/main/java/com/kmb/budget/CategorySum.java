@@ -4,6 +4,16 @@ class CategorySum {
     private String categoryName;
     private String balance;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    private Long id;
+
     public String getCategoryName() {
         return categoryName;
     }
@@ -20,8 +30,9 @@ class CategorySum {
         this.balance = balance;
     }
 
-    public CategorySum(String categoryName, String balance) {
+    public CategorySum(Long id,String categoryName, String balance) {
         this.categoryName = categoryName;
         this.balance = balance;
+        this.id = id;
     }
 }

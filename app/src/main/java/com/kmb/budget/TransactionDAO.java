@@ -34,5 +34,6 @@ public interface TransactionDAO {
     @Insert
     void insert(TransactionModal transaction);
 
-
+    @Query("Select * from transactions where toId = :id or fromId= :id")
+    List<TransactionModal> getAllTransactionsByCategory(Long id);
 }

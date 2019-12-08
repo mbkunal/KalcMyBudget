@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private Date createDate;
     private Date transactionDate;
     private List mList = null;
+    private Long filterId;
 
 
     public DBClass(Context context,Activity activity,String operation){
@@ -33,6 +35,14 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.transactionDAO = db.transactionDAO();
         this.mActivity = activity;
         this.operation = operation;
+    }
+    public DBClass(Context context,Activity activity,String operation,Long filterId){
+        this.db = MainDatabase.getMainDatabase(context);
+        this.categoryDAO = db.categoryDAO();
+        this.transactionDAO = db.transactionDAO();
+        this.mActivity = activity;
+        this.operation = operation;
+        this.filterId = filterId;
     }
     public DBClass(Context context, String nm, String tp){
         this.db = MainDatabase.getMainDatabase(context);
@@ -83,14 +93,14 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 break;
             case("GET_TRANSACTIONS"):
-                List<TransactionModal> tmlist = transactionDAO.getAllTransactions();
+                List<TransactionModal> tmlist = filterId == 0?transactionDAO.getAllTransactions():transactionDAO.getAllTransactionsByCategory(filterId);
                 List<Transaction> list = new ArrayList<>();
                 int i = 1;
-                List<CategoryModal> cm = categoryDAO.getAllCategories();
                 for(TransactionModal tm : tmlist){
                     Long fromId = tm.getFromId();
                     Long toId = tm.getToId();
-                    Transaction t = new Transaction(tm.get_id(),Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),tm.getTransactionDate().toString(),Integer.toString(tm.getAmount()));
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+                    Transaction t = new Transaction(tm.get_id(),Integer.toString(i),categoryDAO.getCategoryName(fromId),categoryDAO.getCategoryName(toId),tm.getComment(),sdf.format(tm.getTransactionDate()),Integer.toString(tm.getAmount()));
                     list.add(t);
                     i++;
                 }
@@ -106,7 +116,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     tml = transactionDAO.getDebitTransaction(cmt.getId());
                     long negative = getTransactionSum(tml);
                     long balance = positive - negative;
-                    CategorySum cs = new CategorySum(cname,Long.toString(balance));
+                    CategorySum cs = new CategorySum(cmt.getId(),cname,Long.toString(balance));
                     csl.add(cs);
                 }
                 mList = csl;
@@ -119,7 +129,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 //transactionDAO.delete(transactionModal);
                 TransactionModal tm = transactionDAO.getTransaction(transactionsActivity.temp.getId());
 
-                Log.e("Transaction","Deleted"+(tm==null?" real":"not Again"));
+                Log.e("Transaction","Deleted"+tm==null?" real":"not Again");
                 break;
         }
         return mList;

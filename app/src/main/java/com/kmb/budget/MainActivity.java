@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         if(list != null && list.size()>0) {
             String[] categoryNamesArray = new String[categoryNamesList.size()];
             categoryNamesArray = categoryNamesList.toArray(categoryNamesArray);
-            ArrayAdapter<String> categories = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, categoryNamesArray);
+            final ArrayAdapter<String> categories = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, categoryNamesArray);
             ((Spinner) findViewById(R.id.fromDropdown)).setAdapter(categories);
             ((Spinner) findViewById(R.id.toDropdown)).setAdapter(categories);
         }
