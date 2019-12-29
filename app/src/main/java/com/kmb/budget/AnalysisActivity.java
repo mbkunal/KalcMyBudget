@@ -26,6 +26,7 @@ public class AnalysisActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         ListView aLV = findViewById(R.id.analysis_listview);
         aLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -12,13 +12,13 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-class CategorySumListAdapter extends ArrayAdapter<CategorySum> {
+class CategoryListAdapter extends ArrayAdapter<CategoryModal> {
 
     private Context context;
     private int resource;
 
 
-    public CategorySumListAdapter(@NonNull Context context, int resource, @NonNull List<CategorySum> objects) {
+    public CategoryListAdapter(@NonNull Context context, int resource, @NonNull List<CategoryModal> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -27,13 +27,10 @@ class CategorySumListAdapter extends ArrayAdapter<CategorySum> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         String name = getItem(position).getCategoryName();
-        String balance =  getItem(position).getBalance();
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource,parent,false);
-        TextView tvCName = convertView.findViewById(R.id.cs_list_cname);
-        TextView tvBalance = convertView.findViewById(R.id.cs_list_balance);
+        TextView tvCName = convertView.findViewById(R.id.cm_list_cname);
         tvCName.setText(name);
-        tvBalance.setText(balance);
         return convertView;
     }
 }

@@ -1,5 +1,6 @@
 package com.kmb.budget;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +14,8 @@ import android.view.View;
 
 public class Setting extends AppCompatActivity {
 
+    private final Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,22 +23,16 @@ public class Setting extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     public void addCategory(View view){
-        Intent intent = new Intent(this, AddCategory.class);
+        Intent intent = new Intent(context, AddCategory.class);
         startActivity(intent);
     }
 
     public void listCategory(View view) {
-
+        Intent intent = new Intent(context, ListCategory.class);
+        startActivity(intent);
     }
 }

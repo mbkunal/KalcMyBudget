@@ -2,7 +2,11 @@ package com.kmb.budget;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -16,30 +20,27 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionsActivity extends AppCompatActivity {
+public class ListCategory extends AppCompatActivity {
 
-
-    protected Transaction temp;
-    private final String getTransactions = "GET_TRANSACTIONS";
-    private final String deleteTransaction = "DELETE_TRANSACTION";
-    Context context = this;
-    TransactionsActivity ta = this;
+    private Context context = this;
+    protected CategoryModal categoryModal;
+    ListCategory lC = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transactions);
+        setContentView(R.layout.activity_list_category);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Long filterCategoryId = getIntent().getLongExtra("category",0);
-        new DBClass(context, ta,getTransactions,filterCategoryId).execute();
-        ListView transactionListView = findViewById(R.id.transactions_listView);
-        registerForContextMenu(transactionListView);
+        ListView aLV = findViewById(R.id.category_ListCategory);
+        registerForContextMenu(aLV);
+        DBClass dbclass = new DBClass(context, this,"GET_CATEGORY_LIST");
+        dbclass.execute();
     }
 
     @Override
@@ -47,18 +48,18 @@ public class TransactionsActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         ListView lv = (ListView)v;
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo)menuInfo;
-        temp = (Transaction)lv.getItemAtPosition(acmi.position);
+        categoryModal = (CategoryModal) lv.getItemAtPosition(acmi.position);
         getMenuInflater().inflate(R.menu.update_delete_click_menu,menu);
     }
 
-    public void createTransactionList(List<Transaction> list){
-        Transaction header = new Transaction((long) 0,"SR","From","To","Comment","Date","Amount");
-        List<Transaction> transactionsList = new ArrayList<>();
-        transactionsList.add(header);
-        transactionsList.addAll(list);
-        ListView transactionListView = findViewById(R.id.transactions_listView);
-        TransactionListAdapter tLAdapter = new TransactionListAdapter(this,R.layout.transaction_list_adapter,transactionsList);
-        transactionListView.setAdapter(tLAdapter);
+    public void setList(List<CategoryModal> list){
+        List<CategoryModal>categoryNamesList = list;
+        ListView aLV = findViewById(R.id.category_ListCategory);
+        if(list != null && list.size()>0) {
+            ListView CategoryListView = findViewById(R.id.category_ListCategory);
+            CategoryListAdapter cLA =  new CategoryListAdapter(context,R.layout.category_list_adapter,list);
+            aLV.setAdapter(cLA);
+        }
     }
 
     @Override
@@ -68,7 +69,7 @@ public class TransactionsActivity extends AppCompatActivity {
         builder.setTitle("Permanent Delete");
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new DBClass(context, ta, deleteTransaction).execute();
+                new DBClass(context, lC, "DELETE_CATEGORY").execute();
                 //new DBClass(context, ta, getTransactions).execute();
                 finish();
             }
@@ -82,7 +83,11 @@ public class TransactionsActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.updateTransaction:
-                Log.e("Update",temp.getTo()+temp.getComment());
+                Intent intent = new Intent(context, AddCategory.class);
+                intent.putExtra("name",categoryModal.getCategoryName());
+                intent.putExtra("type",categoryModal.getType());
+                intent.putExtra("id",categoryModal.getId());
+                startActivity(intent);
                 return true;
             case R.id.deleteTransaction:
                 builder.show();
@@ -91,6 +96,4 @@ public class TransactionsActivity extends AppCompatActivity {
                 return super.onContextItemSelected(item);
         }
     }
-
-
 }

@@ -18,6 +18,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private TransactionDAO transactionDAO;
     private String nm;
     private String tp;
+    private Long categoryId;
     private String operation;
     private String to;
     private String from;
@@ -36,7 +37,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.mActivity = activity;
         this.operation = operation;
     }
-    public DBClass(Context context,Activity activity,String operation,Long filterId){
+    public DBClass(Context context,Activity activity,String operation,Long filterId){// filter by category id
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
         this.transactionDAO = db.transactionDAO();
@@ -44,12 +45,13 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.operation = operation;
         this.filterId = filterId;
     }
-    public DBClass(Context context, String nm, String tp){
+    public DBClass(Context context, String nm, String tp,Long id){
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
         this.nm = nm;
         this.tp = tp;
-        this.operation = "CATEGORY";
+        this.categoryId = id;
+        this.operation = "ADD_CATEGORY";
     }
     public DBClass(Context context, String to, String from, String comment, int amount, Date createDate, Date transactionDate) {
         this.db = MainDatabase.getMainDatabase(context);
@@ -67,13 +69,23 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     protected List<?> doInBackground(Void... voids) {
         int st = 0;
         switch(operation){
-            case("CATEGORY"):
-                CategoryModal category = new CategoryModal();
-                category.setCategoryName(nm);
-                category.setType(tp);
-                categoryDAO.insertCategory(category);
+            case("ADD_CATEGORY"):
+                if(categoryId==-1){
+                    CategoryModal category = new CategoryModal();
+                    category.setCategoryName(nm);
+                    category.setType(tp);
+                    categoryDAO.insertCategory(category);
+                }
+                else{
+                    CategoryModal category = categoryDAO.getCategoryById(categoryId);
+                    category.setType(tp);
+                    category.setCategoryName(nm);
+                    category.setId(categoryId);
+                    categoryDAO.updateCategory(category);
+                    Log.e("updated",nm);
+                }
                 break;
-            case("TRANSACTION"):
+            case("ADD_TRANSACTION"):
                 TransactionModal transaction = new TransactionModal();
                 transaction.setToId(categoryDAO.getCategoryId(to));
                 transaction.setFromId(categoryDAO.getCategoryId(from));
@@ -121,7 +133,16 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 mList = csl;
                 break;
-
+            case("GET_CATEGORY_LIST"):
+                List<CategoryModal> cml0 = categoryDAO.getAllCategories();
+                mList = cml0;
+                break;
+            case("DELETE_CATEGORY"):
+                ListCategory listCategory = (ListCategory) mActivity;
+                categoryDAO.deleteCategory(listCategory.categoryModal);
+                CategoryModal cm  = categoryDAO.getCategoryById(listCategory.categoryModal.getId());
+                Log.e("Transaction","Deleted"+cm==null?" real":"not Again");
+                break;
             case("DELETE_TRANSACTION"):
                 TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
                 transactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
@@ -149,11 +170,11 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 List<CategorySum> csl = (List<CategorySum>)mList;
                 ((AnalysisActivity)mActivity).createAnalysisList(csl);
                 break;
+            case("GET_CATEGORY_LIST"):
+                List<CategoryModal> allCategoryList = (List<CategoryModal>)list;
+                ((ListCategory)mActivity).setList(allCategoryList);
+                break;
         }
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
     }
 
     private long getTransactionSum(List<TransactionModal> tml){
