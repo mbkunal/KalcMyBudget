@@ -59,7 +59,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.categoryDAO = db.categoryDAO();
         this.to = to;
         this.from = from;
-        this.operation = "TRANSACTION";
+        this.operation = "ADD_TRANSACTION";
         this.comment = comment;
         this.amount = amount;
         this.createDate = createDate;
