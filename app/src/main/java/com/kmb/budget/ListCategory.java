@@ -26,7 +26,10 @@ public class ListCategory extends AppCompatActivity {
 
     private Context context = this;
     protected CategoryModal categoryModal;
+    private final String operation = "GET_CATEGORY_LIST";
     ListCategory lC = this;
+    View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +42,14 @@ public class ListCategory extends AppCompatActivity {
 
         ListView aLV = findViewById(R.id.category_ListCategory);
         registerForContextMenu(aLV);
-        DBClass dbclass = new DBClass(context, this,"GET_CATEGORY_LIST");
+        DBClass dbclass = new DBClass(context, this,operation);
         dbclass.execute();
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        this.view = v;
         ListView lv = (ListView)v;
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo)menuInfo;
         categoryModal = (CategoryModal) lv.getItemAtPosition(acmi.position);
@@ -69,7 +73,13 @@ public class ListCategory extends AppCompatActivity {
         builder.setTitle("Permanent Delete");
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new DBClass(context, lC, "DELETE_CATEGORY").execute();
+                if(categoryModal.getCategoryName().equals("Sink")){
+                    Snackbar opFailed = Snackbar.make(view,"Cannot delete Sink",Snackbar.LENGTH_SHORT);
+                    opFailed.show();
+                }
+                else {
+                    new DBClass(context, lC, "DELETE_CATEGORY").execute();
+                }
                 //new DBClass(context, ta, getTransactions).execute();
                 finish();
             }

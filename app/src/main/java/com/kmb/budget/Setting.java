@@ -35,4 +35,9 @@ public class Setting extends AppCompatActivity {
         Intent intent = new Intent(context, ListCategory.class);
         startActivity(intent);
     }
+
+    public void exportTransactions(View view) {
+        Intent intent = new Intent(context, ExportTransactions.class);
+        startActivity(intent);
+    }
 }

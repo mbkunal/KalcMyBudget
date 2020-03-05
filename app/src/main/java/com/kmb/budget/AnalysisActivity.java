@@ -35,7 +35,6 @@ public class AnalysisActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, TransactionsActivity.class);
                 intent.putExtra("category",categorySum.getId());
                 startActivity(intent);
-                Log.e("Worked",categorySum.getCategoryName()+" "+categorySum.getId());
             }
 
         });

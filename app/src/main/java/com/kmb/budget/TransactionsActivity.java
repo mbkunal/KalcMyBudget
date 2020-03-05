@@ -26,7 +26,7 @@ public class TransactionsActivity extends AppCompatActivity {
     private final String getTransactions = "GET_TRANSACTIONS";
     private final String deleteTransaction = "DELETE_TRANSACTION";
     Context context = this;
-    TransactionsActivity ta = this;
+    TransactionsActivity transactionsActivity = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +35,16 @@ public class TransactionsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        Long filterCategoryId = getIntent().getLongExtra("category",0);
-        new DBClass(context, ta,getTransactions,filterCategoryId).execute();
+        boolean isListGiven = getIntent().getBooleanExtra("FilteredListFromExport",false);
+        if(!isListGiven) {
+            Long filterCategoryId = getIntent().getLongExtra("category", -1);
+            new DBClass(context, transactionsActivity, getTransactions, filterCategoryId).execute();
+        }else{
+            Long fromDate = getIntent().getLongExtra("fromDate", 0);
+            Long toDate = getIntent().getLongExtra("toDate", 0);
+            String category = getIntent().getStringExtra("categoryName");
+            new DBClass(context, transactionsActivity, getTransactions+"Filtered", fromDate,toDate,category).execute();
+        }
         ListView transactionListView = findViewById(R.id.transactions_listView);
         registerForContextMenu(transactionListView);
     }
@@ -68,7 +75,7 @@ public class TransactionsActivity extends AppCompatActivity {
         builder.setTitle("Permanent Delete");
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new DBClass(context, ta, deleteTransaction).execute();
+                new DBClass(context, transactionsActivity, deleteTransaction).execute();
                 //new DBClass(context, ta, getTransactions).execute();
                 finish();
             }

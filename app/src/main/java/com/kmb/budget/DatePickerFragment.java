@@ -11,9 +11,9 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DatePickerFragment extends DialogFragment
-        implements DatePickerDialog.OnDateSetListener {
+public class DatePickerFragment extends DialogFragment {
 
+    private int caller;
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -24,13 +24,18 @@ public class DatePickerFragment extends DialogFragment
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        DatePickerDialog dialog = new DatePickerDialog(getActivity(), (MainActivity)getActivity(), year, month, day);
-        dialog.getDatePicker().setMaxDate(new Date().getTime());
+        DatePickerDialog dialog;
+        if(caller == -123) {
+            dialog = new DatePickerDialog(getActivity(), (MainActivity) getActivity(), year, month, day);
+            dialog.getDatePicker().setMaxDate(new Date().getTime());
+        }else {
+            dialog = new DatePickerDialog(getActivity(), (ExportTransactions) getActivity(), year, month, day);
+            dialog.getDatePicker().setMaxDate(new Date().getTime());
+        }
         return dialog;
     }
-
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
+    public void setCaller(int caller){
+        this.caller = caller;
     }
 
 }

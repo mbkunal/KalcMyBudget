@@ -26,19 +26,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     public static final String EXPENDITURE = "EXPENDITURE";
     public static final String SOURCE = "SOURCE";
     public static final String BTF = "BTF";
-
-    private MainDatabase db ;
-    private CategoryDAO categoryDAO;  // = db.categoryDAO();
-    private TransactionDAO transactionDAO;
     private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = MainDatabase.getMainDatabase(this.getApplicationContext());
-        categoryDAO = db.categoryDAO();
-        transactionDAO =db.transactionDAO();
         EditText edt = findViewById(R.id.transDate);
         edt.setText(formatter.format(new Date()));
         edt.setShowSoftInputOnFocus(false);
@@ -47,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        month = month+1;
         ((EditText)findViewById(R.id.transDate)).setText(day + "/" + month + "/" + year);
     }
     @Override
@@ -90,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         String commentText = comment.getText().toString();
         Date tDate;
         Date currentDate = new Date();
-        /*DATE BLOCK*/try {
+        /*DATE BLOCK*/
+        try {
             tDate = formatter.parse(date.getText().toString());
         } catch (ParseException e) {
             tDate = currentDate;
@@ -107,8 +102,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         date.setText(formatter.format(new Date()));
     }
     public void showDatePickerDialog(View view){
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.setCaller(-123);
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
     public void goToAnalysis(View view){
         Intent intent = new Intent(this, AnalysisActivity.class);

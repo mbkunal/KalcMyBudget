@@ -12,7 +12,8 @@
         android:id="@+id/addCategory"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:onClick="addCategory"
         android:text="@string/add_category"
         android:textSize="30sp"
@@ -25,6 +26,7 @@
         android:id="@+id/viewCategoryList"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="1dp"
         android:onClick="listCategory"
         android:text="@string/list_category"
@@ -33,5 +35,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addCategory" />
+
+    <TextView
+        android:id="@+id/exportTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="1dp"
+        android:onClick="exportTransactions"
+        android:text="@string/exportTransactions"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewCategoryList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

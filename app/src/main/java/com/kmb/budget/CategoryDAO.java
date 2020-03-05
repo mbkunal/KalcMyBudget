@@ -13,21 +13,17 @@ import java.util.List;
 public interface CategoryDAO {
 
 
-    @Query("Select categoryName from category")
+    @Query("Select categoryName from category ORDER BY categoryName")
     List<String> getAllCategoryNames();
 
-    @Query("Select * from category")
+    @Query("Select * from category ORDER BY categoryName")
     List<CategoryModal> getAllCategories();
 
+    @Query("select Id from Category where categoryName = :categoryName")
+    Long getCategoryId(String categoryName);
 
-    @Query("Select categoryName from category where Id = :Id")
-    String getCategoryNameById(Long Id);
-
-    @Query("select Id from Category where categoryName = :name")
-    Long getCategoryId(String name);
-
-    @Query("select categoryName from category where Id = :Id")
-    String getCategoryName(Long Id);
+    @Query("select categoryName from category where Id = :categoryId")
+    String getCategoryName(Long categoryId);
 
     @Query("select * from Category where Id = :id ")
     CategoryModal getCategoryById(Long id);
