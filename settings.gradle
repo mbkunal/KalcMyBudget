@@ -1,1 +1,1 @@
-include ':app', ':poi-ooxml-4.1.2'
+include ':app', ':poishadow-all'

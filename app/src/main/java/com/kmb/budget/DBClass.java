@@ -212,8 +212,12 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     ((MainActivity) mActivity).setList(cList);
                 }
                 break;
-            case("GET_TRANSACTIONS"):
             case("GET_TRANSACTIONSFiltered"):
+                List<Transaction> tList1 = (List<Transaction>)mList;
+                ((TransactionsActivity)mActivity).createTransactionList(tList1);
+                ExportTransactions.createExcel(tList1);
+                break;
+            case("GET_TRANSACTIONS"):
                 List<Transaction> tList = (List<Transaction>)mList;
                 ((TransactionsActivity)mActivity).createTransactionList(tList);
                 break;
