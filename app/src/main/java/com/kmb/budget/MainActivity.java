@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -53,10 +54,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         super.onResume();
     }
     public void setList(List<String> list){
-        List<String >categoryNamesList = list;
         if(list != null && list.size()>0) {
-            String[] categoryNamesArray = new String[categoryNamesList.size()];
-            categoryNamesArray = categoryNamesList.toArray(categoryNamesArray);
+            String[] categoryNamesArray = new String[list.size()];
+            categoryNamesArray = list.toArray(categoryNamesArray);
             final ArrayAdapter<String> categories = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, categoryNamesArray);
             ((Spinner) findViewById(R.id.fromDropdown)).setAdapter(categories);
             ((Spinner) findViewById(R.id.toDropdown)).setAdapter(categories);
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(this.INPUT_METHOD_SERVICE);
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+        Objects.requireNonNull(inputManager).hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         Spinner toCategory = findViewById(R.id.toDropdown);
         Spinner fromCategory = findViewById(R.id.fromDropdown);
@@ -124,9 +124,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     }
     public void showAnalysis(View view) {
-        /*TODO
-        Add salary as a transaction in db
-         */
         Intent intent = new Intent(this, ShowChart.class);
         startActivity(intent);
 

@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
+import java.util.Objects;
+
 public class Setting extends AppCompatActivity {
 
     private final Context context = this;
@@ -24,7 +26,7 @@ public class Setting extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
     public void addCategory(View view){
         Intent intent = new Intent(context, AddCategory.class);

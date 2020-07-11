@@ -3,7 +3,6 @@ package com.kmb.budget;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,7 +25,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -34,12 +32,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class TransactionsActivity extends AppCompatActivity {
 
 
     protected Transaction temp;
-    private final String getTransactions = "GET_TRANSACTIONS";
     private final String deleteTransaction = "DELETE_TRANSACTION";
     Context context = this;
     private String category ;
@@ -52,9 +50,10 @@ public class TransactionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transactions);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         boolean isListGiven = getIntent().getBooleanExtra("FilteredListFromExport",false);
+        String getTransactions = "GET_TRANSACTIONS";
         if(!isListGiven) {
             Long filterCategoryId = getIntent().getLongExtra("category", -1);
             new DBClass(context, transactionsActivity, getTransactions, filterCategoryId).execute();
@@ -64,7 +63,7 @@ public class TransactionsActivity extends AppCompatActivity {
             Long toDate = getIntent().getLongExtra("toDate", 0);
             String category = getIntent().getStringExtra("categoryName");
             this.category = category;
-            new DBClass(context, transactionsActivity, getTransactions+"Filtered", fromDate,toDate,category).execute();
+            new DBClass(context, transactionsActivity, getTransactions +"Filtered", fromDate,toDate,category).execute();
         }
         ListView transactionListView = findViewById(R.id.transactions_listView);
         registerForContextMenu(transactionListView);
@@ -97,16 +96,12 @@ public class TransactionsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are You Sure you want to delete?");
         builder.setTitle("Permanent Delete");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                new DBClass(context, transactionsActivity, deleteTransaction).execute();
-                //new DBClass(context, ta, getTransactions).execute();
-                finish();
-            }
+        builder.setPositiveButton("Delete", (dialog, id) -> {
+            new DBClass(context, transactionsActivity, deleteTransaction).execute();
+            //new DBClass(context, ta, getTransactions).execute();
+            finish();
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
+        builder.setNegativeButton("Cancel", (dialog, id) -> {
         });
 
 
@@ -189,16 +184,21 @@ public class TransactionsActivity extends AppCompatActivity {
         sheet.setColumnWidth(3,6000);
         sheet.setColumnWidth(4,2000);
         Date date = new Date();
-        DateFormat f = new SimpleDateFormat("dd_MM_yyyy-HH_mm_ss");
+        DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
         String filename = "transaction"+f.format(date) +".xlsx";
-        String directory = Environment.getExternalStorageDirectory().toString();
-        File folder = new File(directory);
+        File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "Transaction");
+        if(!folder.exists()){
+            folder.mkdirs();
+        }
         File file = new File(folder,filename);
-        //try {
-        //    file.createNewFile();
-        //} catch (IOException e1) {
-         //   e1.printStackTrace();
-        //}
+        if(file.exists()){
+            int i=0;
+            while(file.exists()) {
+                i++;
+                filename = "transaction" + f.format(date) + "(" +i +").xlsx";
+                file = new File(folder,filename);
+            }
+        }
 
         try {
             FileOutputStream fileOut = new FileOutputStream(file);
@@ -207,8 +207,6 @@ public class TransactionsActivity extends AppCompatActivity {
             Toast.makeText(context, "file created", Toast.LENGTH_LONG).show();
             Log.e("File","created");
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

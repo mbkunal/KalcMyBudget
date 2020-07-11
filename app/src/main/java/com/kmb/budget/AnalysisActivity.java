@@ -28,15 +28,11 @@ public class AnalysisActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         ListView aLV = findViewById(R.id.analysis_listview);
-        aLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                categorySum = (CategorySum) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(context, TransactionsActivity.class);
-                intent.putExtra("category",categorySum.getId());
-                startActivity(intent);
-            }
-
+        aLV.setOnItemClickListener((adapterView, view, i, l) -> {
+            categorySum = (CategorySum) adapterView.getItemAtPosition(i);
+            Intent intent = new Intent(context, TransactionsActivity.class);
+            intent.putExtra("category",categorySum.getId());
+            startActivity(intent);
         });
         DBClass dbclass = new DBClass(this, this,"GET_ANALYSIS");
         dbclass.execute();

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 class CategoryListAdapter extends ArrayAdapter<CategoryModal> {
 
@@ -26,7 +27,7 @@ class CategoryListAdapter extends ArrayAdapter<CategoryModal> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String name = getItem(position).getCategoryName();
+        String name = Objects.requireNonNull(getItem(position)).getCategoryName();
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource,parent,false);
         TextView tvCName = convertView.findViewById(R.id.cm_list_cname);

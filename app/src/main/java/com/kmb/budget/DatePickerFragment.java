@@ -10,10 +10,14 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment {
 
     private int caller;
+
+    private Date minDate;
+    private Date maxDate;
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,16 +30,27 @@ public class DatePickerFragment extends DialogFragment {
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog dialog;
         if(caller == -123) {
-            dialog = new DatePickerDialog(getActivity(), (MainActivity) getActivity(), year, month, day);
+            dialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), (MainActivity) getActivity(), year, month, day);
             dialog.getDatePicker().setMaxDate(new Date().getTime());
         }else {
-            dialog = new DatePickerDialog(getActivity(), (ExportTransactions) getActivity(), year, month, day);
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
+            dialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), (ExportTransactions) getActivity(), year, month, day);
+            if(minDate != null){
+                dialog.getDatePicker().setMinDate(minDate.getTime());
+            }
+            dialog.getDatePicker().setMaxDate(maxDate.getTime());
         }
         return dialog;
     }
     public void setCaller(int caller){
         this.caller = caller;
+    }
+
+    public void setMinDate(Date minDate) {
+        this.minDate = minDate;
+    }
+
+    public void setMaxDate(Date maxDate) {
+        this.maxDate = maxDate;
     }
 
 }

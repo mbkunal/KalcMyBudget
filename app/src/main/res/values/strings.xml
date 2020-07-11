@@ -44,8 +44,7 @@
     <string name="exportTransactions">Export Transactions</string>
     <string name="list_category">List Category</string>
     <string name="title_activity_list_category">List Category</string>
-    <string name="title_activity_export_transactions">ExportTransactions</string>
+    <string name="title_activity_export_transactions">Export Transactions</string>
     <string name="showAnalysis">Analysis</string>
-    <string name="title_activity_show_charts">ShowCharts</string>
-    <string name="title_activity_show_chart">ShowChart</string>
+    <string name="title_activity_show_chart">Show Chart</string>
 </resources>

@@ -21,12 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ListCategory extends AppCompatActivity {
 
     private Context context = this;
     protected CategoryModal categoryModal;
-    private final String operation = "GET_CATEGORY_LIST";
     ListCategory lC = this;
     View view;
 
@@ -37,12 +37,13 @@ public class ListCategory extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
         ListView aLV = findViewById(R.id.category_ListCategory);
         registerForContextMenu(aLV);
-        DBClass dbclass = new DBClass(context, this,operation);
+        String operation = "GET_CATEGORY_LIST";
+        DBClass dbclass = new DBClass(context, this, operation);
         dbclass.execute();
     }
 
@@ -57,7 +58,6 @@ public class ListCategory extends AppCompatActivity {
     }
 
     public void setList(List<CategoryModal> list){
-        List<CategoryModal>categoryNamesList = list;
         ListView aLV = findViewById(R.id.category_ListCategory);
         if(list != null && list.size()>0) {
             ListView CategoryListView = findViewById(R.id.category_ListCategory);
@@ -71,22 +71,18 @@ public class ListCategory extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are You Sure you want to delete?");
         builder.setTitle("Permanent Delete");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if(categoryModal.getCategoryName().equals("Sink")){
-                    Snackbar opFailed = Snackbar.make(view,"Cannot delete Sink",Snackbar.LENGTH_SHORT);
-                    opFailed.show();
-                }
-                else {
-                    new DBClass(context, lC, "DELETE_CATEGORY").execute();
-                }
-                //new DBClass(context, ta, getTransactions).execute();
-                finish();
+        builder.setPositiveButton("Delete", (dialog, id) -> {
+            if(categoryModal.getCategoryName().equals("Sink")){
+                Snackbar opFailed = Snackbar.make(view,"Cannot delete Sink",Snackbar.LENGTH_SHORT);
+                opFailed.show();
             }
+            else {
+                new DBClass(context, lC, "DELETE_CATEGORY").execute();
+            }
+            //new DBClass(context, ta, getTransactions).execute();
+            finish();
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
+        builder.setNegativeButton("Cancel", (dialog, id) -> {
         });
 
 

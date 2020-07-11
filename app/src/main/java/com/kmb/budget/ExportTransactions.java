@@ -18,16 +18,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ExportTransactions extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener{
 
     private int callerId;
-    private String me = "EXPORT_TRANSACTIONS";
+    private Date maxDate;
+    private Date minDate;
     private Context context = this;
     private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    private static String category;
-    private static View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,19 @@ public class ExportTransactions extends AppCompatActivity implements
         setContentView(R.layout.activity_export_transactions);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        maxDate = new Date();
         DBClass db = new DBClass(this, this,"GET_CATEGORIES");
+        String me = "EXPORT_TRANSACTIONS";
+        EditText edt = findViewById(R.id.fromDateValue);
+        edt.setText(formatter.format(new Date()));
+        edt.setShowSoftInputOnFocus(false);
+        edt = findViewById(R.id.toDateValue);
+        edt.setText(formatter.format(new Date()));
+        edt.setShowSoftInputOnFocus(false);
         db.setCaller(me);
         db.execute();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -48,12 +56,18 @@ public class ExportTransactions extends AppCompatActivity implements
         callerId = view.getId();
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setCaller(callerId);
+        if(R.id.fromDateValue == callerId){
+            datePickerFragment.setMinDate(null);
+            datePickerFragment.setMaxDate(this.maxDate);
+        }else if (R.id.toDateValue == callerId){
+            datePickerFragment.setMaxDate(new Date());
+            datePickerFragment.setMinDate(this.minDate);
+        }
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
     public void exportTransactions(View view) throws ParseException {
         //Get values from UI
         EditText fromDate = findViewById(R.id.fromDateValue);
-        this.view = view;
         EditText toDate = findViewById(R.id.toDateValue);
         Date fromDateValue = formatter.parse(fromDate.getText().toString());
         Date toDateValue = formatter.parse(toDate.getText().toString());
@@ -66,7 +80,6 @@ public class ExportTransactions extends AppCompatActivity implements
         intent.putExtra("fromDate", Converters.dateToTimestamp(fromDateValue));
         intent.putExtra("toDate", Converters.dateToTimestamp(toDateValue));
         intent.putExtra("categoryName", category);
-        this.category=category;
         startActivity(intent);
     }
 
@@ -74,7 +87,7 @@ public class ExportTransactions extends AppCompatActivity implements
         List<String >categoryNamesList = new ArrayList<>();
         categoryNamesList.add("ALL");
         categoryNamesList.addAll(list);
-        if(list != null && list.size()>0) {
+        if(list.size() > 0) {
 
             String[] categoryNamesArray = new String[categoryNamesList.size()];
             categoryNamesArray = categoryNamesList.toArray(categoryNamesArray);
@@ -86,5 +99,18 @@ public class ExportTransactions extends AppCompatActivity implements
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         month = month+1;
         ((EditText)findViewById(callerId)).setText(day + "/" + month + "/" + year);
+        if(R.id.fromDateValue == callerId){
+            try {
+                this.minDate = new SimpleDateFormat("dd/MM/yyyy").parse(day+"/"+ month+ "/"+year);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else if (R.id.toDateValue == callerId){
+            try {
+                this.maxDate = new SimpleDateFormat("dd/MM/yyyy").parse(day+"/"+ month+ "/"+year);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

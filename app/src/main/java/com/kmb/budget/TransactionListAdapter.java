@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 class TransactionListAdapter extends ArrayAdapter<Transaction> {
 
@@ -33,12 +34,12 @@ class TransactionListAdapter extends ArrayAdapter<Transaction> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        String sr = getItem(position).getSr();
-        String from = getItem(position).getFrom();
-        String to = getItem(position).getTo();
-        String comment = getItem(position).getComment();
-        String date = getItem(position).getDate();
-        String amount = getItem(position).getAmount();
+        String sr = Objects.requireNonNull(getItem(position)).getSr();
+        String from = Objects.requireNonNull(getItem(position)).getFrom();
+        String to = Objects.requireNonNull(getItem(position)).getTo();
+        String comment = Objects.requireNonNull(getItem(position)).getComment();
+        String date = Objects.requireNonNull(getItem(position)).getDate();
+        String amount = Objects.requireNonNull(getItem(position)).getAmount();
 
         Transaction transaction = getItem(position);
 

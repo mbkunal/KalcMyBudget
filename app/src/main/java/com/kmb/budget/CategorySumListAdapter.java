@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 class CategorySumListAdapter extends ArrayAdapter<CategorySum> {
 
@@ -26,8 +27,8 @@ class CategorySumListAdapter extends ArrayAdapter<CategorySum> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String name = getItem(position).getCategoryName();
-        String balance =  getItem(position).getBalance();
+        String name = Objects.requireNonNull(getItem(position)).getCategoryName();
+        String balance =  Objects.requireNonNull(getItem(position)).getBalance();
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource,parent,false);
         TextView tvCName = convertView.findViewById(R.id.cs_list_cname);

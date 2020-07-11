@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Objects;
+
 public class AddCategory extends AppCompatActivity {
 
     private Long id;
@@ -36,7 +38,7 @@ public class AddCategory extends AppCompatActivity {
         if(id != -1){
             EditText name = findViewById(R.id.categoryNameValue);
             name.setText(catName);
-            switch(catType){
+            switch(Objects.requireNonNull(catType)){
                 case("Source"):
                     catTypeSpinner.setSelection(0);
                     break;
@@ -55,7 +57,7 @@ public class AddCategory extends AppCompatActivity {
             bt.setText("Update Category");
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
     public void createCategory(View view){
         Spinner type = findViewById(R.id.categoryTypeValue);
