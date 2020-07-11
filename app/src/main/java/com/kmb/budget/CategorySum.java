@@ -3,6 +3,16 @@ package com.kmb.budget;
 class CategorySum {
     private String categoryName;
     private String balance;
+    private Long id;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Long getId() {
         return id;
@@ -12,7 +22,12 @@ class CategorySum {
         this.id = id;
     }
 
-    private Long id;
+    public CategorySum(Long id,String categoryName, String balance,  String type) {
+        this.categoryName = categoryName;
+        this.balance = balance;
+        this.id = id;
+        this.type = type;
+    }
 
     public String getCategoryName() {
         return categoryName;

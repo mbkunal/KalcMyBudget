@@ -103,7 +103,7 @@
         android:layout_height="115dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="20dp"
-        android:onClick="goToAnalysis"
+        android:onClick="goToBalanceSheet"
         android:text="@string/analysis"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintStart_toStartOf="parent" />
@@ -136,8 +136,8 @@
         android:layout_height="115dp"
         android:layout_marginEnd="44dp"
         android:layout_marginBottom="75dp"
-        android:onClick="addSalary"
-        android:text="@string/addSalary"
+        android:onClick="showAnalysis"
+        android:text="@string/showAnalysis"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

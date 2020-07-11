@@ -28,6 +28,9 @@ public interface CategoryDAO {
     @Query("select * from Category where Id = :id ")
     CategoryModal getCategoryById(Long id);
 
+    @Query("select * from Category where type = :type ")
+    List<CategoryModal> getCategoriesByType(String type);
+
     @Insert
     void insertCategory(CategoryModal categoryModal);
 

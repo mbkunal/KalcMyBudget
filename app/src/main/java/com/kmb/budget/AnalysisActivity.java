@@ -7,13 +7,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AnalysisActivity extends AppCompatActivity {
 
@@ -25,7 +25,7 @@ public class AnalysisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_analysis);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         ListView aLV = findViewById(R.id.analysis_listview);
         aLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -43,10 +43,14 @@ public class AnalysisActivity extends AppCompatActivity {
     }
 
     public void createAnalysisList(List<CategorySum> list) {
-        CategorySum header = new CategorySum((long) 0,"Category","Balance");
+        CategorySum header = new CategorySum((long) 0,"Category","Balance","Type");
         List<CategorySum> csl = new ArrayList<>();
         csl.add(header);
-        csl.addAll(list);
+        for(CategorySum temp: list){
+            if(!temp.getCategoryName().toUpperCase().equals("Sink".toUpperCase())){
+                csl.add(temp);
+            }
+        }
         ListView analysisListView = findViewById(R.id.analysis_listview);
         CategorySumListAdapter csla = new CategorySumListAdapter(this,R.layout.analysis_list_adapter,csl);
         analysisListView.setAdapter(csla);

@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         datePickerFragment.setCaller(-123);
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
-    public void goToAnalysis(View view){
+    public void goToBalanceSheet(View view){
         Intent intent = new Intent(this, AnalysisActivity.class);
         startActivity(intent);
     }
@@ -123,10 +123,13 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         startActivity(intent);
 
     }
-    public void addSalary(View view) {
+    public void showAnalysis(View view) {
         /*TODO
         Add salary as a transaction in db
          */
+        Intent intent = new Intent(this, ShowChart.class);
+        startActivity(intent);
+
         Snackbar salary = Snackbar.make(view, "Salary Added", Snackbar.LENGTH_SHORT);
         salary.show();
 

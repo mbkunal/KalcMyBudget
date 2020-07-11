@@ -154,6 +154,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 mList = list;
                 break;
             case("GET_ANALYSIS"):
+            case("GET_ANALYSIS_FOR_CHART"):
                 List<CategorySum> csl= new ArrayList<>();
                 List<CategoryModal> cml = categoryDAO.getAllCategories();
                 for(CategoryModal cmt : cml){
@@ -163,7 +164,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     tml = transactionDAO.getDebitTransaction(cmt.getId());
                     long negative = getTransactionSum(tml);
                     long balance = positive - negative;
-                    CategorySum cs = new CategorySum(cmt.getId(),cname,Long.toString(balance));
+                    CategorySum cs = new CategorySum(cmt.getId(),cname,Long.toString(balance),cmt.getType());
                     csl.add(cs);
                 }
                 mList = csl;
@@ -213,10 +214,10 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 break;
             case("GET_TRANSACTIONSFiltered"):
-                List<Transaction> tList1 = (List<Transaction>)mList;
+                /*List<Transaction> tList1 = (List<Transaction>)mList;
                 ((TransactionsActivity)mActivity).createTransactionList(tList1);
-                ExportTransactions.createExcel(tList1);
-                break;
+
+                break;*/
             case("GET_TRANSACTIONS"):
                 List<Transaction> tList = (List<Transaction>)mList;
                 ((TransactionsActivity)mActivity).createTransactionList(tList);
@@ -224,6 +225,10 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
             case("GET_ANALYSIS"):
                 List<CategorySum> csl = (List<CategorySum>)mList;
                 ((AnalysisActivity)mActivity).createAnalysisList(csl);
+                break;
+            case("GET_ANALYSIS_FOR_CHART"):
+                List<CategorySum> csl2 = (List<CategorySum>)mList;
+                ((ShowChart)mActivity).showChart(csl2);
                 break;
             case("GET_CATEGORY_LIST"):
                 List<CategoryModal> allCategoryList = (List<CategoryModal>)mList;

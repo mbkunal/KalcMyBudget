@@ -7,7 +7,7 @@
     <string name="dateOfTrans">Date</string>
     <string name="from">From</string>
     <string name="comment">Comment</string>
-    <string name="analysis">Analysis</string>
+    <string name="analysis">Balance sheet</string>
     <string name="addSalary">Add Salary</string>
     <string name="setting">Settings</string>
     <string name="tList">Transactions List</string>
@@ -45,4 +45,7 @@
     <string name="list_category">List Category</string>
     <string name="title_activity_list_category">List Category</string>
     <string name="title_activity_export_transactions">ExportTransactions</string>
+    <string name="showAnalysis">Analysis</string>
+    <string name="title_activity_show_charts">ShowCharts</string>
+    <string name="title_activity_show_chart">ShowChart</string>
 </resources>
