@@ -28,10 +28,15 @@ class CategoryListAdapter extends ArrayAdapter<CategoryModal> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         String name = Objects.requireNonNull(getItem(position)).getCategoryName();
+        String type = Objects.requireNonNull(getItem(position)).getType();
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource,parent,false);
         TextView tvCName = convertView.findViewById(R.id.cm_list_cname);
+        TextView tvCType = convertView.findViewById(R.id.cm_list_ctype);
+        TextView empty = convertView.findViewById(R.id.empty);
+        empty.setText(" ");
         tvCName.setText(name);
+        tvCType.setText(type);
         return convertView;
     }
 }

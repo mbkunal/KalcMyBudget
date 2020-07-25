@@ -1,24 +1,20 @@
 package com.kmb.budget;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +32,6 @@ public class ListCategory extends AppCompatActivity {
         setContentView(R.layout.activity_list_category);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
@@ -60,7 +55,11 @@ public class ListCategory extends AppCompatActivity {
     public void setList(List<CategoryModal> list){
         ListView aLV = findViewById(R.id.category_ListCategory);
         if(list != null && list.size()>0) {
-            ListView CategoryListView = findViewById(R.id.category_ListCategory);
+            CategoryModal temp = new CategoryModal();
+            temp.setId((long)0);
+            temp.setCategoryName("Name");
+            temp.setType("Type");
+            list.add(0,temp);
             CategoryListAdapter cLA =  new CategoryListAdapter(context,R.layout.category_list_adapter,list);
             aLV.setAdapter(cLA);
         }

@@ -1,17 +1,16 @@
 package com.kmb.budget;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
 import android.app.DatePickerDialog;
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -23,9 +22,9 @@ import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    public static final String INVESTMENT= "INVESTMENT";
-    public static final String EXPENDITURE = "EXPENDITURE";
-    public static final String SOURCE = "SOURCE";
+    public static final String INVESTMENT= "Investment";
+    public static final String EXPENDITURE = "Expenditure";
+    public static final String SOURCE = "Source";
     public static final String BTF = "BTF";
     private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 

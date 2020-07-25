@@ -12,6 +12,17 @@ import java.util.List;
 
 class DBClass extends AsyncTask<Void,Void,List<?>> {
 
+    /**
+     * DO NOT TOUCH
+     * UNLESS YOU ARE AWARE WHAT YOU ARE DOING.
+     * THIS IS VERY MESSED UP CLASS AND TIGHTLY COUPLED WITH CLASSES FROM WHICH IT IS CALLED.
+     * USING VERY BD METHOD AND STATIC STINGS.
+     * ANY CHANGE IN STATIC STRINGS MIGHT CAUSE THE APP TO
+     * BECOME UNSTABLE AND/OR UNUSABLE.
+     *
+     *
+     */
+
     private MainDatabase db ;
     private Activity mActivity;
     private CategoryDAO categoryDAO;

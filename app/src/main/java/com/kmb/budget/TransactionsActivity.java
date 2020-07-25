@@ -52,6 +52,8 @@ public class TransactionsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+
+
         boolean isListGiven = getIntent().getBooleanExtra("FilteredListFromExport",false);
         String getTransactions = "GET_TRANSACTIONS";
         if(!isListGiven) {

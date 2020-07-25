@@ -1,16 +1,16 @@
 package com.kmb.budget;
 
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -39,16 +39,16 @@ public class AddCategory extends AppCompatActivity {
             EditText name = findViewById(R.id.categoryNameValue);
             name.setText(catName);
             switch(Objects.requireNonNull(catType)){
-                case("Source"):
+                case(MainActivity.SOURCE):
                     catTypeSpinner.setSelection(0);
                     break;
-                case("BTF"):
+                case(MainActivity.BTF):
                     catTypeSpinner.setSelection(1);
                     break;
-                case("Investment"):
+                case(MainActivity.INVESTMENT):
                     catTypeSpinner.setSelection(2);
                     break;
-                case("Expenditure"):
+                case(MainActivity.EXPENDITURE):
                     catTypeSpinner.setSelection(3);
                     break;
 

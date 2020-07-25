@@ -1,6 +1,6 @@
 package com.kmb.budget;
 
-class CategorySum {
+class CategorySum implements Comparable<CategorySum>{
     private String categoryName;
     private String balance;
     private Long id;
@@ -22,7 +22,7 @@ class CategorySum {
         this.id = id;
     }
 
-    public CategorySum(Long id,String categoryName, String balance,  String type) {
+    CategorySum(Long id,String categoryName, String balance,  String type) {
         this.categoryName = categoryName;
         this.balance = balance;
         this.id = id;
@@ -37,7 +37,7 @@ class CategorySum {
         this.categoryName = categoryName;
     }
 
-    public String getBalance() {
+    String getBalance() {
         return balance;
     }
 
@@ -45,9 +45,14 @@ class CategorySum {
         this.balance = balance;
     }
 
-    public CategorySum(Long id,String categoryName, String balance) {
-        this.categoryName = categoryName;
-        this.balance = balance;
-        this.id = id;
+
+    @Override
+    public int compareTo(CategorySum categorySum) {
+        if(Float.parseFloat(this.balance) < Float.parseFloat(categorySum.balance)){
+            return -1;
+        }else if(Float.parseFloat(this.balance) > Float.parseFloat(categorySum.balance)){
+            return 1;
+        }
+        return 0;
     }
 }

@@ -13,6 +13,10 @@
     <string name="tList">Transactions List</string>
     <string name="amount">Amount</string>
     <string name="title_activity_app_settings1">Settings</string>
+    <string name="investment">Investment</string>
+    <string name="expenditure">Expenditure</string>
+    <string name="source">Source</string>
+    <string name="btf">BTF</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

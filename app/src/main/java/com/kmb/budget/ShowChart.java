@@ -2,7 +2,6 @@ package com.kmb.budget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +14,9 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowChart extends AppCompatActivity {
 
@@ -28,6 +29,9 @@ public class ShowChart extends AppCompatActivity {
         setContentView(R.layout.activity_show_chart);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
         int[] rColors = {R.color.chartBlue,R.color.chartBrown,R.color.chartGreen,R.color.chartOrange,R.color.chartPink,R.color.chartPurple,R.color.chartRed,R.color.chartYellow};
         context = this;
         pChart = findViewById(R.id.pie_chart);
@@ -40,59 +44,53 @@ public class ShowChart extends AppCompatActivity {
     }
     public static void showChart(List<CategorySum> list){
 
-        ArrayList balance2 = new ArrayList();
-        ArrayList balance3 = new ArrayList();
-
-
-        //Below lines are just to make sure that all the data is visible.
-        int assets = 0;
-        int aSum = 0;
-        int i = 0;
-        float avg;
-        for(CategorySum cs : list){
-            if(cs.getType().toUpperCase().equals("Investment".toUpperCase()) || cs.getType().toUpperCase().equals("Source".toUpperCase()) || cs.getType().toUpperCase().equals("BTF".toUpperCase())){
-                assets += Integer.parseInt(cs.getBalance());
-                if( Integer.parseInt(cs.getBalance()) > 0) {
-                    aSum += Integer.parseInt(cs.getBalance());
-                    i++;
-                }
-            }
-        }
-        try {
-            avg = aSum / i;
-        }catch (Exception e){
-            avg = 0;
-            e.printStackTrace();
-        }
         ArrayList balance = new ArrayList();
-        for(CategorySum cs : list){
-            if(cs.getType().toUpperCase().equals("Investment".toUpperCase()) || cs.getType().toUpperCase().equals("Source".toUpperCase()) || cs.getType().toUpperCase().equals("BTF".toUpperCase())){
-                if( Integer.parseInt(cs.getBalance()) > 0) {
-                    if(Float.parseFloat((cs.getBalance())) >  avg){
-                        balance.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
-                    }else{
-                        balance2.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
-                    }
+        int assets = 0;
+        int i = 0;
 
-                    Log.e("cs.getCategoryName()", String.valueOf(Float.parseFloat(cs.getBalance())));
-                }
+        //BEGIN OPTIMIZER
+        // Below lines are just to make sure that all the data is visible.
+        /*for(CategorySum cs : list){
+            if(cs.getType().toUpperCase().equals(MainActivity.EXPENDITURE.toUpperCase())){
+                list.remove(cs);
+            } else if (Float.parseFloat(cs.getBalance()) <= 0  ){
+                assets += Integer.parseInt(cs.getBalance());
+                list.remove(cs);
+            }else{
+                assets += Integer.parseInt(cs.getBalance());
+            }
+        }*/
+
+        while(i<list.size()){
+            CategorySum cs = list.get(i);
+            if(cs.getType().toUpperCase().equals(MainActivity.EXPENDITURE.toUpperCase())){
+                list.remove(cs);
+            } else if (Float.parseFloat(cs.getBalance()) <= 0  ){
+                assets += Integer.parseInt(cs.getBalance());
+                list.remove(cs);
+            }else{
+                assets += Integer.parseInt(cs.getBalance());
+                i++;
             }
         }
-        if (balance.size() > balance2.size()){
-            while(balance2.size()>0) {
-                balance3.add(balance.remove(0));
-                balance3.add(balance2.remove(0));
+
+
+
+
+
+        Collections.sort(list);
+        //balance.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
+        while(!list.isEmpty()){
+            CategorySum cs = list.remove(0);
+            balance.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
+            if(list.size()>0){
+                cs = list.remove(list.size()-1);
+                balance.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
             }
-            balance3.addAll(balance);
-        }else
-        {
-            while(balance.size()>0) {
-                balance3.add(balance2.remove(0));
-                balance3.add(balance.remove(0));
-            }
-            balance3.addAll(balance2);
         }
-        PieDataSet dataSet = new PieDataSet(balance3, "Balance");
+        // END OPTIMIZER
+
+        PieDataSet dataSet = new PieDataSet(balance, "Balance");
 
         PieData data = new PieData(dataSet);
         pChart.setData(data);
@@ -105,5 +103,4 @@ public class ShowChart extends AppCompatActivity {
         dataSet.setColors(colors);
         pChart.animateXY(1000, 1000);
     }
-
 }
