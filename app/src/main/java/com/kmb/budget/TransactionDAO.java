@@ -33,16 +33,16 @@ public interface TransactionDAO {
     List<TransactionModal> getDebitTransaction(long fromCategoryId);
 
     @Query("Delete from transactions where _id= :transactionId")
-    void deleteTransactionById(Long transactionId);
+    int deleteTransactionById(Long transactionId);
 
     @Delete
-    void delete(TransactionModal transaction) ;
+    int delete(TransactionModal transaction) ;
 
     @Insert
-    void insert(TransactionModal transaction);
+    long insert(TransactionModal transaction);
 
     @Update
-    void update(TransactionModal transaction);
+    int update(TransactionModal transaction);
 
     @Query("Select * from transactions where toId = :categoryId or fromId= :categoryId ORDER BY transactionDate")
     List<TransactionModal> getAllTransactionsByCategory(Long categoryId);

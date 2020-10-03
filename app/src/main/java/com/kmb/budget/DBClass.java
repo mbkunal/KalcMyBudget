@@ -27,6 +27,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private Activity mActivity;
     private CategoryDAO categoryDAO;
     private TransactionDAO transactionDAO;
+    private BudgetTransactionDAO budgetTransactionDAO;
     private String nm;
     private String tp;
     private Long categoryId;
@@ -35,6 +36,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private String from;
     private String comment;
     private int amount;
+    private Boolean isBudget;
     private Date createDate;
     private Date transactionDate;
     private List mList = null;
@@ -67,12 +69,14 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.categoryId = id;
         this.operation = "ADD_CATEGORY";
     }
-    public DBClass(Context context, String to, String from, String comment, int amount, Date createDate, Date transactionDate) {
+    public DBClass(Context context, String to, String from, String comment, int amount, Date createDate, Date transactionDate, Boolean isBudget) {
         this.db = MainDatabase.getMainDatabase(context);
         this.transactionDAO = db.transactionDAO();
         this.categoryDAO = db.categoryDAO();
+        this.budgetTransactionDAO = db.budgetTransactionDAO();
         this.to = to;
         this.from = from;
+        this.isBudget = isBudget;
         this.operation = "ADD_TRANSACTION";
         this.comment = comment;
         this.amount = amount;
@@ -139,8 +143,14 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 transaction.setAmount(amount);
                 transaction.setTransactionDate(transactionDate);
                 transaction.setCreateDate(createDate);
-                transactionDAO.insert(transaction);
-                Log.e("transaction",transaction.getComment());
+                long id = transactionDAO.insert(transaction);
+                if(isBudget){
+                    BudgetTransactionModal budgetTransactionModal = new BudgetTransactionModal(transaction);
+                    budgetTransactionModal.set_id(id);
+                    long bid = budgetTransactionDAO.insert(budgetTransactionModal);
+                    Log.e("budge transaction",budgetTransactionModal.getComment()+" " + bid+ " " + budgetTransactionModal.get_id());
+                }
+                Log.e("budge transaction",transaction.getComment()+" " + id+ " " + transaction.get_id());
                 break;
             case("GET_CATEGORIES"):
                 try {

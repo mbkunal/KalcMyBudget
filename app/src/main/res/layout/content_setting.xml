@@ -50,4 +50,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewCategoryList" />
 
+    <TextView
+        android:id="@+id/budgetSetting"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="1dp"
+        android:onClick="budgetSetting"
+        android:text="Budget Setting"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exportTransactions" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

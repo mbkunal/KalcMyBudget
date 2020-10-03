@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "eb8e5714d22aea6817b8f0940bb9d1fd",
+    "identityHash": "747b2b77ab4d79c53d7b39def01853ec",
     "entities": [
       {
         "tableName": "transactions",
@@ -147,12 +147,59 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "propertyTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `type` TEXT NOT NULL, `propName` TEXT NOT NULL, `propValue` TEXT NOT NULL, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "propName",
+            "columnName": "propName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "propValue",
+            "columnName": "propValue",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_propertyTable_propName",
+            "unique": true,
+            "columnNames": [
+              "propName"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_propertyTable_propName` ON `${TABLE_NAME}` (`propName`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb8e5714d22aea6817b8f0940bb9d1fd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '747b2b77ab4d79c53d7b39def01853ec')"
     ]
   }
 }

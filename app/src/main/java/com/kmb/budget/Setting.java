@@ -3,14 +3,10 @@ package com.kmb.budget;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
 
 import java.util.Objects;
 
@@ -42,4 +38,9 @@ public class Setting extends AppCompatActivity {
         Intent intent = new Intent(context, ExportTransactions.class);
         startActivity(intent);
     }
+    public void budgetSetting(View view) {
+        Intent intent = new Intent(context, BudgetSetting.class);
+        startActivity(intent);
+    }
+
 }

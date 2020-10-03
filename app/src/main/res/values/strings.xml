@@ -51,4 +51,7 @@
     <string name="title_activity_export_transactions">Export Transactions</string>
     <string name="showAnalysis">Analysis</string>
     <string name="title_activity_show_chart">Show Chart</string>
+    <string name="title_activity_budget_setting">BudgetSetting</string>
+    <string name="title_activity_add_income">Add Income</string>
+    <string name="title_activity_list_in_ex">Income/Expenses</string>
 </resources>

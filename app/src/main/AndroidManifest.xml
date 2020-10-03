@@ -7,14 +7,41 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".ListInEx"
+            android:label="@string/title_activity_list_in_ex"
+            android:parentActivityName=".BudgetSetting"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kmb.budget.BudgetSetting" />
+        </activity>
+        <activity
+            android:name=".AddIncomeExpense"
+            android:label="@string/title_activity_add_income"
+            android:parentActivityName=".BudgetSetting"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kmb.budget.BudgetSetting" />
+        </activity>
+        <activity
+            android:name=".BudgetSetting"
+            android:label="@string/title_activity_budget_setting"
+            android:parentActivityName=".Setting"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kmb.budget.Setting" />
+        </activity>
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

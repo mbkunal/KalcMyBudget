@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -93,13 +94,20 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             tDate = currentDate;
         }
         if(to.equals("") || from.equals("")|| commentText.equals("") ){
+            Snackbar invalidValue = Snackbar.make(view, "Check the values", Snackbar.LENGTH_LONG);
+            invalidValue.show();
             return;
         }
-        DBClass dbclass = new DBClass(this, to, from, commentText, amount, currentDate, tDate);
+        CheckBox isBudgetView = findViewById(R.id.isBudget);
+        Boolean isbudget = isBudgetView.isChecked();
+        DBClass dbclass = new DBClass(this, to, from, commentText, amount, currentDate, tDate,isbudget);
         dbclass.execute();
         Snackbar transactDone = Snackbar.make(view, "Transaction Added", Snackbar.LENGTH_SHORT);
         transactDone.show();
         comment.setText("");
+        if(isBudgetView.isChecked()){
+            isBudgetView.toggle();
+        }
         ((EditText) findViewById(R.id.amount)).setText("");
         date.setText(formatter.format(new Date()));
     }

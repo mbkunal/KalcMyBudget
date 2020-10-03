@@ -12,6 +12,20 @@ public class BudgetTransactionModal {
         return comment;
     }
 
+    public BudgetTransactionModal(TransactionModal tModal){
+        this._id = tModal.get_id();
+        this.amount = tModal.getAmount();
+        this.comment = tModal.getComment();
+        this.createDate = tModal.getCreateDate();
+        this.transactionDate = tModal.getTransactionDate();
+        this.fromId = tModal.getFromId();
+        this.toId = tModal.getToId();
+    }
+    public BudgetTransactionModal ()
+    {
+
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }
