@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".AddIncomeExpense"
+    tools:showIn="@layout/activity_add_income_expense">
+
+    <TextView
+        android:id="@+id/propName"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:text="Name"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/propNameValue"
+        android:layout_width="235dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:hint="Property Name"
+        android:inputType="textPersonName"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/propName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/propValue"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Value"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/propName"  />
+
+    <EditText
+        android:id="@+id/propValueValue"
+        android:layout_width="235dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Property Value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/propValue"
+        app:layout_constraintTop_toBottomOf="@+id/propNameValue" />
+
+    <TextView
+        android:id="@+id/propType"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Type"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/propValue" />
+
+    <Spinner
+        android:id="@+id/propTypeValue"
+        android:layout_width="235dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:textSize="36sp"
+        app:layout_constraintStart_toEndOf="@+id/propType"
+        app:layout_constraintTop_toBottomOf="@+id/propValueValue" />
+
+    <Button
+        android:id="@+id/createProperty"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="44dp"
+        android:onClick="addIncomeExpense"
+        android:text="Add Income/Expense"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/propTypeValue" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ public abstract class MainDatabase extends RoomDatabase {
                 database.execSQL("CREATE TABLE `propertyTable` (`_id` INTEGER NOT NULL, "
                         + "`type` TEXT NOT NULL, "
                         + "`propName` TEXT NOT NULL UNIQUE,"
-                        + "`propValue` TEXT NOT NULL,"
+                        + "`propValue` INTEGER NOT NULL,"
                         + " PRIMARY KEY(`_id`))");
                 database.execSQL("CREATE UNIQUE INDEX index_propertyTable_propName ON propertyTable (propName)");
             }

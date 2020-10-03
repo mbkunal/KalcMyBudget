@@ -28,15 +28,21 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private CategoryDAO categoryDAO;
     private TransactionDAO transactionDAO;
     private BudgetTransactionDAO budgetTransactionDAO;
+    private PropertyDAO propertyDAO;
     private String nm;
     private String tp;
+    private long propValue;
+    private String propName;
+    private String propType;
     private Long categoryId;
+    private Long propertyId;
     private String operation;
     private String to;
     private String from;
     private String comment;
     private int amount;
     private Boolean isBudget;
+    private Boolean error;
     private Date createDate;
     private Date transactionDate;
     private List mList = null;
@@ -46,14 +52,29 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private Long fromDate;
     private String categoryName;
 
+    //General Constructor
     public DBClass(Context context,Activity activity,String operation){
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
         this.transactionDAO = db.transactionDAO();
+        this.propertyDAO = db.propertyDAO();
+        this.budgetTransactionDAO = db.budgetTransactionDAO();
         this.mActivity = activity;
         this.operation = operation;
     }
-    public DBClass(Context context,Activity activity,String operation,Long filterId){// filter by category id
+    //Add Income Expense
+    public DBClass(Context context,AddIncomeExpense activity,String operation, String propType, String propName, long propValue, long id){
+        this.db = MainDatabase.getMainDatabase(context);
+        this.propertyDAO = db.propertyDAO();
+        this.propName = propName;
+        this.propType = propType;
+        this.propValue = propValue;
+        this.operation = operation;
+        this.mActivity = activity;
+        this.propertyId = id;
+    }
+    // filter by category id
+    public DBClass(Context context,Activity activity,String operation,Long filterId){
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
         this.transactionDAO = db.transactionDAO();
@@ -61,6 +82,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.operation = operation;
         this.filterId = filterId;
     }
+    //Add Category constructor
     public DBClass(Context context, String nm, String tp,Long id){
         this.db = MainDatabase.getMainDatabase(context);
         this.categoryDAO = db.categoryDAO();
@@ -69,6 +91,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.categoryId = id;
         this.operation = "ADD_CATEGORY";
     }
+    //Add Transaction constructor
     public DBClass(Context context, String to, String from, String comment, int amount, Date createDate, Date transactionDate, Boolean isBudget) {
         this.db = MainDatabase.getMainDatabase(context);
         this.transactionDAO = db.transactionDAO();
@@ -83,7 +106,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.createDate = createDate;
         this.transactionDate = transactionDate;
     }
-
+    //GET Transaction Constructor (filtered and all)
     public DBClass(Context context, TransactionsActivity transactionsActivity, String getTransactions, Long fromDate, Long toDate, String category) {
         this.db = MainDatabase.getMainDatabase(context);
         this.transactionDAO = db.transactionDAO();
@@ -97,8 +120,28 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
 
     @Override
     protected List<?> doInBackground(Void... voids) {
-        int st = 0;
+        this.error = false;
         switch(operation){
+            case("ADD_PROPERTY"):
+                if(propertyId ==-1) {
+                    try {
+                        PropertyModal propertyModal = new PropertyModal();
+                        propertyModal.setPropName(propName);
+                        propertyModal.setPropValue(propValue);
+                        propertyModal.setType(propType);
+                        propertyDAO.insertProperty(propertyModal);
+                        Log.e("added property", propName + " " + propValue);
+                    } catch (Exception e) {
+                        this.error = true;
+                    }
+                }else{
+                    PropertyModal propertyModal = propertyDAO.getPropertyById(propertyId);
+                    propertyModal.setPropName(propName);
+                    propertyModal.setPropValue(propValue);
+                    propertyModal.setType(propType);
+                    propertyDAO.updateProperty(propertyModal);
+                }
+                break;
             case("GET_TRANSACTIONSFiltered"):
                 List<TransactionModal> tmlist;
                 if(categoryName.equals("ALL")){
@@ -194,6 +237,10 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 List<CategoryModal> cml0 = categoryDAO.getAllCategories();
                 mList = cml0;
                 break;
+            case("GET_PROPERTY_LIST"):
+                List<PropertyModal> propertyModals = propertyDAO.getAllProperties();
+                mList = propertyModals;
+                break;
             case("DELETE_CATEGORY"):
                 ListCategory listCategory = (ListCategory) mActivity;
                 CategoryModal categoryModal = listCategory.categoryModal;
@@ -219,6 +266,10 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
             case("DELETE_TRANSACTION"):
                 TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
                 transactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
+                break;
+            case("DELETE_PROPERTY"):
+                ListInEx listInEx = (ListInEx) mActivity;
+                propertyDAO.deleteProperty(listInEx.propertyModal);
                 break;
         }
         return mList;
@@ -255,7 +306,16 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 List<CategoryModal> allCategoryList = (List<CategoryModal>)mList;
                 ((ListCategory)mActivity).setList(allCategoryList);
                 break;
+            case("GET_PROPERTY_LIST"):
+                List<PropertyModal> allProperyList = (List<PropertyModal>)mList;
+                ((ListInEx)mActivity).setList(allProperyList);
+                break;
+            case("ADD_PROPERTY"):
+                AddIncomeExpense addIncomeExpense = (AddIncomeExpense)mActivity;
+                addIncomeExpense.status(error);
+                break;
         }
+
     }
     public void setCaller(String caller){
         this.caller = caller;

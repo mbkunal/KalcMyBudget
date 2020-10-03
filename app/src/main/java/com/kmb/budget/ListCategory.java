@@ -34,7 +34,6 @@ public class ListCategory extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-
         ListView aLV = findViewById(R.id.category_ListCategory);
         registerForContextMenu(aLV);
         String operation = "GET_CATEGORY_LIST";

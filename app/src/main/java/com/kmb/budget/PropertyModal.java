@@ -34,15 +34,15 @@ public class PropertyModal {
         this.propName = propName;
     }
 
-    public String getPropValue() {
+    public long getPropValue() {
         return propValue;
     }
 
-    public void setPropValue(String propValue) {
+    public void setPropValue(long propValue) {
         this.propValue = propValue;
     }
 
-    @PrimaryKey()
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="_id")
     private long _id;
 
@@ -57,6 +57,6 @@ public class PropertyModal {
 
     @ColumnInfo(name="propValue")
     @NonNull
-    private String propValue;
+    private long propValue;
 
 }

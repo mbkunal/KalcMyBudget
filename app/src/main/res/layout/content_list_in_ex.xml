@@ -8,4 +8,11 @@
     tools:context=".ListInEx"
     tools:showIn="@layout/activity_list_in_ex">
 
+    <ListView
+        android:id="@+id/property_listProperty"
+        android:layout_width="match_parent"
+        android:scrollbars="vertical"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
