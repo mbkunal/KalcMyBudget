@@ -2,6 +2,7 @@ package com.kmb.budget;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +24,7 @@ public class ShowChart extends AppCompatActivity {
     Context context;
     static PieChart pChart;
     static List<Integer> colors;
+    static EditText monthlyBudgetValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class ShowChart extends AppCompatActivity {
         int[] rColors = {R.color.chartBlue,R.color.chartBrown,R.color.chartGreen,R.color.chartOrange,R.color.chartPink,R.color.chartPurple,R.color.chartRed,R.color.chartYellow};
         context = this;
         pChart = findViewById(R.id.pie_chart);
+        monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
         DBClass dbclass = new DBClass(this, this,"GET_ANALYSIS_FOR_CHART");
         dbclass.execute();
         colors = ColorTemplate.createColors(getResources(),rColors);
@@ -42,24 +45,14 @@ public class ShowChart extends AppCompatActivity {
 
 
     }
-    public static void showChart(List<CategorySum> list){
+    public static void showChart(List<CategorySum> list, long monthlyBudget){
 
         ArrayList balance = new ArrayList();
         int assets = 0;
         int i = 0;
+        monthlyBudgetValue.setText(String.valueOf(monthlyBudget));
 
-        //BEGIN OPTIMIZER
-        // Below lines are just to make sure that all the data is visible.
-        /*for(CategorySum cs : list){
-            if(cs.getType().toUpperCase().equals(MainActivity.EXPENDITURE.toUpperCase())){
-                list.remove(cs);
-            } else if (Float.parseFloat(cs.getBalance()) <= 0  ){
-                assets += Integer.parseInt(cs.getBalance());
-                list.remove(cs);
-            }else{
-                assets += Integer.parseInt(cs.getBalance());
-            }
-        }*/
+
 
         while(i<list.size()){
             CategorySum cs = list.get(i);
@@ -73,11 +66,6 @@ public class ShowChart extends AppCompatActivity {
                 i++;
             }
         }
-
-
-
-
-
         Collections.sort(list);
         //balance.add(new PieEntry(Float.parseFloat(cs.getBalance()), cs.getCategoryName()));
         while(!list.isEmpty()){

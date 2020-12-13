@@ -69,10 +69,7 @@ public class ListInEx extends AppCompatActivity {
             new DBClass(context, listInEx, "DELETE_PROPERTY").execute();
             finish();
         });
-        builder.setNegativeButton("Cancel", (dialog, id) -> {
-        });
-
-
+        builder.setNegativeButton("Cancel", (dialog, id) -> { });
 
         switch(item.getItemId()){
             case R.id.updateTransaction:
@@ -85,7 +82,7 @@ public class ListInEx extends AppCompatActivity {
                 return true;
             case R.id.deleteTransaction:
                 builder.show();
-                return true;
+            return true;
             default:
                 return super.onContextItemSelected(item);
         }

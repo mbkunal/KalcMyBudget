@@ -27,7 +27,7 @@ public class ExportTransactions extends AppCompatActivity implements
     private Date maxDate;
     private Date minDate;
     private Context context = this;
-    private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    protected static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

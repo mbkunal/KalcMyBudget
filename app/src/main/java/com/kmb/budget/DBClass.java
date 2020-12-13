@@ -5,10 +5,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 class DBClass extends AsyncTask<Void,Void,List<?>> {
 
@@ -51,6 +56,8 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private Long toDate;
     private Long fromDate;
     private String categoryName;
+    private long budgetLeft;
+    private long monthlyBudget;
 
     //General Constructor
     public DBClass(Context context,Activity activity,String operation){
@@ -217,8 +224,31 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 mList = list;
                 break;
-            case("GET_ANALYSIS"):
+
             case("GET_ANALYSIS_FOR_CHART"):
+                List<PropertyModal> propertyModalList = propertyDAO.getAllProperties();
+                long income = 0;
+                long expense = 0;
+                for(PropertyModal pm : propertyModalList) {
+                    switch( pm.getType().toUpperCase()){
+                        case("EXPENSE"):
+                            expense += pm.getPropValue();
+                            break;
+                        case("INCOME"):
+                            income += pm.getPropValue();
+                            break;
+                    }
+                }
+                monthlyBudget = income-expense;
+
+                Long longFromDate = Converters.dateToTimestamp(Converters.getFirstDate());
+                Long longToDate = Converters.dateToTimestamp(Converters.getLastDate());
+                List<BudgetTransactionModal> budgetTransactionModalList = new ArrayList<>();
+                budgetTransactionModalList = budgetTransactionDAO.getTransactions(longFromDate,longToDate);
+
+
+
+            case("GET_ANALYSIS"):
                 List<CategorySum> csl= new ArrayList<>();
                 List<CategoryModal> cml = categoryDAO.getAllCategories();
                 for(CategoryModal cmt : cml){
@@ -300,7 +330,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 break;
             case("GET_ANALYSIS_FOR_CHART"):
                 List<CategorySum> csl2 = (List<CategorySum>)mList;
-                ((ShowChart)mActivity).showChart(csl2);
+                ((ShowChart)mActivity).showChart(csl2, monthlyBudget);
                 break;
             case("GET_CATEGORY_LIST"):
                 List<CategoryModal> allCategoryList = (List<CategoryModal>)mList;
