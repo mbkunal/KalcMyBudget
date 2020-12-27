@@ -3,6 +3,7 @@ package com.kmb.budget;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,7 +25,8 @@ public class ShowChart extends AppCompatActivity {
     Context context;
     static PieChart pChart;
     static List<Integer> colors;
-    static EditText monthlyBudgetValue;
+    static TextView monthlyBudgetText;
+    static TextView budgetLeftText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,8 @@ public class ShowChart extends AppCompatActivity {
         int[] rColors = {R.color.chartBlue,R.color.chartBrown,R.color.chartGreen,R.color.chartOrange,R.color.chartPink,R.color.chartPurple,R.color.chartRed,R.color.chartYellow};
         context = this;
         pChart = findViewById(R.id.pie_chart);
-        monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
+        monthlyBudgetText = findViewById(R.id.monthlyBudgetText);
+        budgetLeftText = findViewById(R.id.BudgetLeftText);
         DBClass dbclass = new DBClass(this, this,"GET_ANALYSIS_FOR_CHART");
         dbclass.execute();
         colors = ColorTemplate.createColors(getResources(),rColors);
@@ -45,12 +48,13 @@ public class ShowChart extends AppCompatActivity {
 
 
     }
-    public static void showChart(List<CategorySum> list, long monthlyBudget){
+    public static void showChart(List<CategorySum> list, long monthlyBudget, long budgetLeft){
 
         ArrayList balance = new ArrayList();
         int assets = 0;
         int i = 0;
-        monthlyBudgetValue.setText(String.valueOf(monthlyBudget));
+        monthlyBudgetText.setText("Monthly Budget :-  " + (monthlyBudget));
+        budgetLeftText.setText("Budget Left :-  " + (budgetLeft));
 
 
 

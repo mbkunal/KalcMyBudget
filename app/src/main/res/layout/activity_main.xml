@@ -155,12 +155,22 @@
 
     <CheckBox
         android:id="@+id/isBudget"
-        android:layout_width="356dp"
+        android:layout_width="200dp"
         android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:text="Budget Transaction"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment" />
+
+    <Spinner
+        android:id="@+id/budgetTransactionType"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/isBudget"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

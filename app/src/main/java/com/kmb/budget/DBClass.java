@@ -189,18 +189,20 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 TransactionModal transaction = new TransactionModal();
                 transaction.setToId(categoryDAO.getCategoryId(to));
                 transaction.setFromId(categoryDAO.getCategoryId(from));
-                transaction.setComment(comment);
+                transaction.setComment(comment.split(";")[0]);
                 transaction.setAmount(amount);
                 transaction.setTransactionDate(transactionDate);
                 transaction.setCreateDate(createDate);
                 long id = transactionDAO.insert(transaction);
+                Log.e("TransactionId : ", String.valueOf(id)) ;
                 if(isBudget){
+                    transaction.setComment(comment.split(";")[1]);
                     BudgetTransactionModal budgetTransactionModal = new BudgetTransactionModal(transaction);
                     budgetTransactionModal.set_id(id);
-                    long bid = budgetTransactionDAO.insert(budgetTransactionModal);
-                    Log.e("budge transaction",budgetTransactionModal.getComment()+" " + bid+ " " + budgetTransactionModal.get_id());
+                    id = budgetTransactionDAO.insert(budgetTransactionModal);
+                    Log.e("BudgetTransactionId : " ,String.valueOf(id) );
                 }
-                Log.e("budge transaction",transaction.getComment()+" " + id+ " " + transaction.get_id());
+                id = 0;
                 break;
             case("GET_CATEGORIES"):
                 try {
@@ -243,10 +245,20 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
 
                 Long longFromDate = Converters.dateToTimestamp(Converters.getFirstDate());
                 Long longToDate = Converters.dateToTimestamp(Converters.getLastDate());
-                List<BudgetTransactionModal> budgetTransactionModalList = new ArrayList<>();
+                List<BudgetTransactionModal> budgetTransactionModalList;
                 budgetTransactionModalList = budgetTransactionDAO.getTransactions(longFromDate,longToDate);
 
-
+                long in =0;
+                long ex =0;
+                for (BudgetTransactionModal btm : budgetTransactionModalList){
+                    if(btm.getComment().toUpperCase().equals("INCOME")){
+                        in += btm.getAmount();
+                    }
+                    else if (btm.getComment().toUpperCase().equals("EXPENSE")){
+                        ex += btm.getAmount();
+                    }
+                }
+                budgetLeft = in - ex;
 
             case("GET_ANALYSIS"):
                 List<CategorySum> csl= new ArrayList<>();
@@ -296,6 +308,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
             case("DELETE_TRANSACTION"):
                 TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
                 transactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
+                budgetTransactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
                 break;
             case("DELETE_PROPERTY"):
                 ListInEx listInEx = (ListInEx) mActivity;
@@ -330,7 +343,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 break;
             case("GET_ANALYSIS_FOR_CHART"):
                 List<CategorySum> csl2 = (List<CategorySum>)mList;
-                ((ShowChart)mActivity).showChart(csl2, monthlyBudget);
+                ((ShowChart)mActivity).showChart(csl2, monthlyBudget, budgetLeft);
                 break;
             case("GET_CATEGORY_LIST"):
                 List<CategoryModal> allCategoryList = (List<CategoryModal>)mList;

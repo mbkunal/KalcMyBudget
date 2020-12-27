@@ -19,30 +19,29 @@
 
     <TextView
         android:id="@+id/monthlyBudgetText"
-        android:layout_width="215dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="140dp"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center_vertical"
         android:text="Monthly Budget"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/pie_chart"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/monthlyBudgetValue"
-        android:layout_width="115dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="140dp"
-        android:clickable="false"
-        android:ems="10"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:inputType="none"
+    <TextView
+        android:id="@+id/BudgetLeftText"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:text="Budget Left"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/pie_chart"
-        app:layout_constraintStart_toEndOf="@+id/monthlyBudgetText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthlyBudgetText" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

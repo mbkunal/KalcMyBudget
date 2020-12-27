@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     public static final String EXPENDITURE = "Expenditure";
     public static final String SOURCE = "Source";
     public static final String BTF = "BTF";
+    Spinner budgetTransactionType;
     private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
@@ -36,6 +37,27 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
+
+
+        budgetTransactionType = findViewById(R.id.budgetTransactionType);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.prop_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        CheckBox isBudgetView = findViewById(R.id.isBudget);
+        isBudgetView.setOnClickListener(view1 -> {
+            if(isBudgetView.isChecked()){
+                budgetTransactionType = findViewById(R.id.budgetTransactionType);
+                budgetTransactionType.setVisibility(View.VISIBLE);
+            }else{
+                budgetTransactionType = findViewById(R.id.budgetTransactionType);
+                budgetTransactionType.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
+        budgetTransactionType.setAdapter(adapter);
         EditText edt = findViewById(R.id.transDate);
         edt.setText(formatter.format(new Date()));
         edt.setShowSoftInputOnFocus(false);
@@ -54,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         super.onResume();
     }
     public void setList(List<String> list){
+        //Called after db.execute in onCreate
         if(list != null && list.size()>0) {
             String[] categoryNamesArray = new String[list.size()];
             categoryNamesArray = list.toArray(categoryNamesArray);
@@ -85,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             return;
         }
         String commentText = comment.getText().toString();
+        commentText = commentText.replaceAll(";",",");
         Date tDate;
         Date currentDate = new Date();
         /*DATE BLOCK*/
@@ -100,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
         CheckBox isBudgetView = findViewById(R.id.isBudget);
         Boolean isbudget = isBudgetView.isChecked();
+        if(isbudget){
+            commentText = commentText + ";" +budgetTransactionType.getSelectedItem().toString();
+        }
         DBClass dbclass = new DBClass(this, to, from, commentText, amount, currentDate, tDate,isbudget);
         dbclass.execute();
         Snackbar transactDone = Snackbar.make(view, "Transaction Added", Snackbar.LENGTH_SHORT);
