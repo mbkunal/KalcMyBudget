@@ -31,7 +31,6 @@ public class DatePickerFragment extends DialogFragment {
         DatePickerDialog dialog;
         if(caller == -123) {
             dialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), (MainActivity) getActivity(), year, month, day);
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
         }else {
             dialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), (ExportTransactions) getActivity(), year, month, day);
             if(minDate != null){
