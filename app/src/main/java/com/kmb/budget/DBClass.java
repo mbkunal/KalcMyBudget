@@ -129,8 +129,18 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     protected List<?> doInBackground(Void... voids) {
         this.error = false;
         switch(operation){
+            case("DB_CLEAN"):
+                {List<TransactionModal> tmlist = transactionDAO.getAllTransactions();
+                for(TransactionModal tm : tmlist){
+                    if( tm.getFromId() == tm.getToId()){
+                        int j = budgetTransactionDAO.deleteTransactionById(tm.get_id());
+                        int i = transactionDAO.delete(tm);
+                        //Log.e( j+ "deleted",String.valueOf(i));
+                    }
+                }
+                break;}
             case("ADD_PROPERTY"):
-                if(propertyId ==-1) {
+                {if(propertyId ==-1) {
                     try {
                         PropertyModal propertyModal = new PropertyModal();
                         propertyModal.setPropName(propName);
@@ -148,9 +158,9 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     propertyModal.setType(propType);
                     propertyDAO.updateProperty(propertyModal);
                 }
-                break;
+                break;}
             case("GET_TRANSACTIONSFiltered"):
-                List<TransactionModal> tmlist;
+                {List<TransactionModal> tmlist;
                 if(categoryName.equals("ALL")){
                     tmlist = transactionDAO.getTransactions(fromDate,toDate);
                 }else{
@@ -168,9 +178,9 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     i++;
                 }
                 mList = list;
-                break;
+                break;}
             case("ADD_CATEGORY"):
-                if(categoryId==-1){
+                {if(categoryId==-1){
                     CategoryModal category = new CategoryModal();
                     category.setCategoryName(nm);
                     category.setType(tp);
@@ -184,9 +194,9 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     categoryDAO.updateCategory(category);
                     Log.e("updated",nm);
                 }
-                break;
+                break;}
             case("ADD_TRANSACTION"):
-                TransactionModal transaction = new TransactionModal();
+                {TransactionModal transaction = new TransactionModal();
                 transaction.setToId(categoryDAO.getCategoryId(to));
                 transaction.setFromId(categoryDAO.getCategoryId(from));
                 transaction.setComment(comment.split(";")[0]);
@@ -203,19 +213,19 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     Log.e("BudgetTransactionId : " ,String.valueOf(id) );
                 }
                 id = 0;
-                break;
+                break;}
             case("GET_CATEGORIES"):
-                try {
+                {try {
                     mList = categoryDAO.getAllCategoryNames();
                 }catch (Exception e){
                     e.printStackTrace();
                     mList = null;
                 }
-                break;
+                break;}
             case("GET_TRANSACTIONS"):
-                tmlist = filterId == -1?transactionDAO.getAllTransactions():transactionDAO.getAllTransactionsByCategory(filterId);
-                list = new ArrayList<>();
-                i = 1;
+                {List<TransactionModal> tmlist = filterId == -1?transactionDAO.getAllTransactions():transactionDAO.getAllTransactionsByCategory(filterId);
+                List<Transaction> list = new ArrayList<>();
+                int i = 1;
                 for(TransactionModal tm : tmlist){
                     Long fromId = tm.getFromId();
                     Long toId = tm.getToId();
@@ -225,10 +235,9 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     i++;
                 }
                 mList = list;
-                break;
-
+                break;}
             case("GET_ANALYSIS_FOR_CHART"):
-                List<PropertyModal> propertyModalList = propertyDAO.getAllProperties();
+                {List<PropertyModal> propertyModalList = propertyDAO.getAllProperties();
                 long income = 0;
                 long expense = 0;
                 for(PropertyModal pm : propertyModalList) {
@@ -258,10 +267,11 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                         ex += btm.getAmount();
                     }
                 }
-                budgetLeft = in - ex;
-
+                budgetLeft = in - ex;}
+                //I had intentionally left break statement as below part is needed to be run after above part.
+                //DO NOT CHANGE THE ORDER. ADD NEW BOCKS EITHER ABOVE OR BELOW.
             case("GET_ANALYSIS"):
-                List<CategorySum> csl= new ArrayList<>();
+                {List<CategorySum> csl= new ArrayList<>();
                 List<CategoryModal> cml = categoryDAO.getAllCategories();
                 for(CategoryModal cmt : cml){
                     String cname = cmt.getCategoryName();
@@ -274,17 +284,17 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     csl.add(cs);
                 }
                 mList = csl;
-                break;
+                break;}
             case("GET_CATEGORY_LIST"):
-                List<CategoryModal> cml0 = categoryDAO.getAllCategories();
+                {List<CategoryModal> cml0 = categoryDAO.getAllCategories();
                 mList = cml0;
-                break;
+                break;}
             case("GET_PROPERTY_LIST"):
-                List<PropertyModal> propertyModals = propertyDAO.getAllProperties();
+                {List<PropertyModal> propertyModals = propertyDAO.getAllProperties();
                 mList = propertyModals;
-                break;
+                break;}
             case("DELETE_CATEGORY"):
-                ListCategory listCategory = (ListCategory) mActivity;
+                {ListCategory listCategory = (ListCategory) mActivity;
                 CategoryModal categoryModal = listCategory.categoryModal;
                 Long sink;
                 try {
@@ -304,16 +314,16 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                     break;
                 }
                 categoryDAO.deleteCategory(categoryModal);
-                break;
+                break;}
             case("DELETE_TRANSACTION"):
-                TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
+                {TransactionsActivity transactionsActivity = (TransactionsActivity)mActivity;
                 transactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
                 budgetTransactionDAO.deleteTransactionById(transactionsActivity.temp.getId());
-                break;
+                break;}
             case("DELETE_PROPERTY"):
-                ListInEx listInEx = (ListInEx) mActivity;
+                {ListInEx listInEx = (ListInEx) mActivity;
                 propertyDAO.deleteProperty(listInEx.propertyModal);
-                break;
+                break;}
         }
         return mList;
     }
@@ -329,10 +339,6 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 break;
             case("GET_TRANSACTIONSFiltered"):
-                /*List<Transaction> tList1 = (List<Transaction>)mList;
-                ((TransactionsActivity)mActivity).createTransactionList(tList1);
-
-                break;*/
             case("GET_TRANSACTIONS"):
                 List<Transaction> tList = (List<Transaction>)mList;
                 ((TransactionsActivity)mActivity).createTransactionList(tList);

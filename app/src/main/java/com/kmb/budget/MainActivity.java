@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         if(isBudgetView.isChecked()){
             isBudgetView.toggle();
         }
+        budgetTransactionType.setVisibility(View.INVISIBLE);
         ((EditText) findViewById(R.id.amount)).setText("");
         date.setText(formatter.format(new Date()));
     }

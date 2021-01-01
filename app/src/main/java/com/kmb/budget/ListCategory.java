@@ -70,14 +70,13 @@ public class ListCategory extends AppCompatActivity {
         builder.setMessage("Are You Sure you want to delete?");
         builder.setTitle("Permanent Delete");
         builder.setPositiveButton("Delete", (dialog, id) -> {
-            if(categoryModal.getCategoryName().equals("Sink")){
+            if(categoryModal.getCategoryName().toUpperCase().equals("SINK")){
                 Snackbar opFailed = Snackbar.make(view,"Cannot delete Sink",Snackbar.LENGTH_SHORT);
                 opFailed.show();
             }
             else {
                 new DBClass(context, lC, "DELETE_CATEGORY").execute();
             }
-            //new DBClass(context, ta, getTransactions).execute();
             finish();
         });
         builder.setNegativeButton("Cancel", (dialog, id) -> {
