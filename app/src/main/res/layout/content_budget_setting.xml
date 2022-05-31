@@ -36,5 +36,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addIncomeExpense" />
 
+    <TextView
+        android:id="@+id/listAll2"
+        android:layout_width="331dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="20dp"
+        android:onClick="listInEx"
+        android:text="Show Monthly Data"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/period"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ListAll" />
+
+    <CheckBox
+        android:id="@+id/period"
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ListAll" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

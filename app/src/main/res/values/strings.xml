@@ -21,6 +21,8 @@
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
+    <string name="preference_file_key">com.kmb.budget.preferenceFile</string>
+    <string name="showMonthly">showMonthly</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>

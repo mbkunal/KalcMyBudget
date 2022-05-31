@@ -2,6 +2,8 @@ package com.kmb.budget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -58,6 +61,8 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
     private String categoryName;
     private long budgetLeft;
     private long monthlyBudget;
+    private boolean showMonthly;
+    private Context context;
 
     //General Constructor
     public DBClass(Context context,Activity activity,String operation){
@@ -68,6 +73,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.budgetTransactionDAO = db.budgetTransactionDAO();
         this.mActivity = activity;
         this.operation = operation;
+        this.context =  context;
     }
     //Add Income Expense
     public DBClass(Context context,AddIncomeExpense activity,String operation, String propType, String propName, long propValue, long id){
@@ -79,6 +85,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.operation = operation;
         this.mActivity = activity;
         this.propertyId = id;
+        this.context =  context;
     }
     // filter by category id
     public DBClass(Context context,Activity activity,String operation,Long filterId){
@@ -88,6 +95,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.mActivity = activity;
         this.operation = operation;
         this.filterId = filterId;
+        this.context =  context;
     }
     //Add Category constructor
     public DBClass(Context context, String nm, String tp,Long id){
@@ -97,6 +105,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.tp = tp;
         this.categoryId = id;
         this.operation = "ADD_CATEGORY";
+        this.context =  context;
     }
     //Add Transaction constructor
     public DBClass(Context context, String to, String from, String comment, int amount, Date createDate, Date transactionDate, Boolean isBudget) {
@@ -112,6 +121,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.amount = amount;
         this.createDate = createDate;
         this.transactionDate = transactionDate;
+        this.context =  context;
     }
     //GET Transaction Constructor (filtered and all)
     public DBClass(Context context, TransactionsActivity transactionsActivity, String getTransactions, Long fromDate, Long toDate, String category) {
@@ -123,6 +133,7 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
         this.operation = getTransactions;
         this.mActivity = transactionsActivity;
         this.categoryName = category;
+        this.context =  context;
     }
 
     @Override
@@ -223,7 +234,27 @@ class DBClass extends AsyncTask<Void,Void,List<?>> {
                 }
                 break;}
             case("GET_TRANSACTIONS"):
-                {List<TransactionModal> tmlist = filterId == -1?transactionDAO.getAllTransactions():transactionDAO.getAllTransactionsByCategory(filterId);
+                {
+                    SharedPreferences sharedPref = context.getSharedPreferences("com.kmb.budget.preferenceFile", Context.MODE_PRIVATE);
+                    this.showMonthly = sharedPref.getBoolean("showMonthly", true);
+                    List<TransactionModal> tmlist;
+                    if (!showMonthly){
+                        tmlist = filterId == -1?transactionDAO.getAllTransactions():transactionDAO.getAllTransactionsByCategory(filterId);
+                    }else{
+                        final Calendar c = Calendar.getInstance();
+                        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH) );
+                        c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
+                        c.set(Calendar.MILLISECOND,c.getActualMaximum(Calendar.MILLISECOND));
+                        c.set(Calendar.MINUTE,c.getActualMaximum(Calendar.MINUTE));
+                        long lto = Converters.dateToTimestamp(c.getTime());
+                        c.add(Calendar.MONTH, -1);
+                        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+                        c.set(Calendar.HOUR_OF_DAY, 0);
+                        c.set(Calendar.MILLISECOND,0);
+                        c.set(Calendar.MINUTE,0);
+                        long lfr = Converters.dateToTimestamp(c.getTime());
+                        tmlist = filterId == -1?transactionDAO.getTransactions(lfr,lto):transactionDAO.getTransactions(lfr,lto,filterId);
+                    }
                 List<Transaction> list = new ArrayList<>();
                 int i = 1;
                 for(TransactionModal tm : tmlist){

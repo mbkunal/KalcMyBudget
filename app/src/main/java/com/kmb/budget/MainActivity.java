@@ -162,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         Intent intent = new Intent(this, ShowChart.class);
         startActivity(intent);
 
-        Snackbar salary = Snackbar.make(view, "Salary Added", Snackbar.LENGTH_SHORT);
-        salary.show();
 
     }
 

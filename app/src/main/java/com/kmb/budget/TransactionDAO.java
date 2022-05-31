@@ -23,6 +23,7 @@ public interface TransactionDAO {
     @Query("SELECT * FROM transactions WHERE transactionDate BETWEEN :from AND :to AND ( toId = :categoryId or fromId= :categoryId ) ORDER BY transactionDate")
     List<TransactionModal> getTransactions(long from, long to, long categoryId);
 
+
     @Query("Select COUNT(*) from transactions")
     int countTransactions();
 
